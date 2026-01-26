@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>13F Change & Options Analysis Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200..800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                        success: "#0bda5b",
+                        danger: "#ef4444"
+                    },
+                    fontFamily: {
+                        display: "Inter"
+                    },
+                    borderRadius: {
+                        DEFAULT: "0.25rem",
+                        lg: "0.5rem",
+                        xl: "0.75rem",
+                        full: "9999px"
+                    }
+                }
+            }
+        };
+    </script>
+    <style type="text/tailwindcss">
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #111418;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #283039;
+            border-radius: 10px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #3b4754;
+        }
+        .terminal-table th {
+            @apply px-4 py-3 text-[10px] font-bold uppercase tracking-wider text-slate-500 bg-slate-50 dark:bg-[#1c242c] border-b border-slate-200 dark:border-[#283039];
+        }
+        .terminal-table td {
+            @apply px-4 py-3 text-xs border-b border-slate-100 dark:border-[#283039];
+        }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .loading-shimmer {
+            background: linear-gradient(90deg, #1c2127 25%, #283039 50%, #1c2127 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white antialiased font-display">
+    <div class="relative flex h-screen w-full flex-col overflow-hidden">
+        <header class="flex items-center justify-between whitespace-nowrap border-b border-solid border-slate-200 dark:border-[#283039] bg-white dark:bg-background-dark px-6 py-3 z-20">
+            <div class="flex items-center gap-8">
+                <a href="/" class="flex items-center gap-3 text-primary">
+                    <div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                        <span class="material-symbols-outlined text-xl">analytics</span>
+                    </div>
+                    <h2 class="text-slate-900 dark:text-white text-lg font-bold leading-tight tracking-tight">13F Terminal</h2>
+                </a>
+                <label class="flex flex-col min-w-40 h-9 max-w-64">
+                    <div class="flex w-full flex-1 items-stretch rounded-lg h-full">
+                        <div class="text-slate-400 flex border-none bg-slate-100 dark:bg-[#283039] items-center justify-center pl-3 rounded-l-lg">
+                            <span class="material-symbols-outlined text-lg">search</span>
+                        </div>
+                        <input class="form-input flex w-full min-w-0 flex-1 border-none bg-slate-100 dark:bg-[#283039] text-slate-900 dark:text-white placeholder:text-slate-500 focus:ring-0 text-sm font-normal rounded-r-lg" placeholder="Search funds, tickers..." value=""/>
+                    </div>
+                </label>
+            </div>
+            <div class="flex items-center gap-4">
+                <div class="flex gap-2">
+                    <button class="flex items-center justify-center rounded-lg h-9 w-9 bg-slate-100 dark:bg-[#283039] text-slate-600 dark:text-white">
+                        <span class="material-symbols-outlined text-[20px]">notifications</span>
+                    </button>
+                    <button class="flex items-center justify-center rounded-lg h-9 w-9 bg-slate-100 dark:bg-[#283039] text-slate-600 dark:text-white">
+                        <span class="material-symbols-outlined text-[20px]">settings</span>
+                    </button>
+                    <button class="flex items-center justify-center rounded-lg h-9 w-9 bg-slate-100 dark:bg-[#283039] text-slate-600 dark:text-white">
+                        <span class="material-symbols-outlined text-[20px]">help_outline</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+        
+        <div class="flex flex-1 overflow-hidden">
+            <aside class="w-72 flex flex-col border-r border-slate-200 dark:border-[#283039] bg-white dark:bg-background-dark overflow-y-auto custom-scrollbar">
+                <div class="p-5 flex flex-col gap-6">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Select Entity</h3>
+                        <div class="relative group">
+                            <select id="entity-select" class="form-select w-full bg-slate-100 dark:bg-[#1c242c] border border-slate-200 dark:border-[#3b4754] rounded-lg text-sm text-slate-900 dark:text-white py-2.5 px-3 focus:ring-primary focus:border-primary transition-all">
+                                <option value="">Loading entities...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4">Select Quarter</h3>
+                        <div class="relative group">
+                            <select id="quarter-select" class="form-select w-full bg-slate-100 dark:bg-[#1c242c] border border-slate-200 dark:border-[#3b4754] rounded-lg text-sm text-slate-900 dark:text-white py-2.5 px-3 focus:ring-primary focus:border-primary transition-all">
+                                <option value="">Select a quarter...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-slate-200 dark:border-[#283039]">
+                        <button id="analyze-btn" onclick="analyzeReport()" class="w-full bg-primary hover:bg-primary/90 text-white font-bold py-2.5 rounded-lg text-sm transition-all shadow-lg shadow-primary/20 disabled:opacity-50">
+                            Analyze
+                        </button>
+                    </div>
+                </div>
+                <div class="mt-auto p-5 space-y-4">
+                    <div id="sync-status" class="bg-primary/10 border border-primary/20 rounded-xl p-4">
+                        <div class="flex items-center gap-2 text-primary mb-2">
+                            <span class="material-symbols-outlined text-lg">verified</span>
+                            <span class="text-xs font-bold">EDGAR Verified</span>
+                        </div>
+                        <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Select an entity and quarter to view analysis.
+                        </p>
+                    </div>
+                    <a href="/" class="flex w-full items-center justify-center gap-2 rounded-lg py-2 text-sm text-slate-500 hover:text-primary transition-colors">
+                        <span class="material-symbols-outlined text-lg">arrow_back</span>
+                        <span>Back to Console</span>
+                    </a>
+                </div>
+            </aside>
+            
+            <main class="flex-1 overflow-y-auto custom-scrollbar bg-slate-50 dark:bg-[#111418]">
+                <div class="px-8 pt-6">
+                    <div class="flex flex-wrap items-center gap-2 mb-2">
+                        <a class="text-slate-400 hover:text-primary text-xs font-medium transition-colors" href="/">Home</a>
+                        <span class="text-slate-400 text-xs">/</span>
+                        <a class="text-slate-400 hover:text-primary text-xs font-medium transition-colors" href="/">Institutional Filings</a>
+                        <span class="text-slate-400 text-xs">/</span>
+                        <span id="breadcrumb-entity" class="text-slate-900 dark:text-white text-xs font-bold">Select an Entity</span>
+                    </div>
+                    <div class="flex items-center justify-between pb-6">
+                        <h1 id="page-title" class="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
+                            13F Change & Options Analysis <span id="quarter-badge" class="text-primary">-</span>
+                        </h1>
+                        <div class="flex gap-2">
+                            <button class="px-4 py-1.5 rounded-lg bg-white dark:bg-[#283039] border border-slate-200 dark:border-[#3b4754] text-xs font-bold flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">history</span> Historical Data
+                            </button>
+                            <button class="px-4 py-1.5 rounded-lg bg-white dark:bg-[#283039] border border-slate-200 dark:border-[#3b4754] text-xs font-bold flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">compare_arrows</span> Compare Funds
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Summary Cards -->
+                <div id="summary-cards" class="px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                    <!-- Total Value Card -->
+                    <div class="flex flex-col gap-2 rounded-xl p-5 border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase">Total Value</p>
+                            <span class="material-symbols-outlined text-primary text-lg">account_balance_wallet</span>
+                        </div>
+                        <p id="total-value" class="text-slate-900 dark:text-white text-2xl font-black leading-tight">-</p>
+                        <div id="value-change" class="flex items-center gap-1.5">
+                            <span class="text-slate-400 text-xs">Select a report to view</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Net Activity Card -->
+                    <div class="flex flex-col gap-2 rounded-xl p-5 border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase">Net Activity</p>
+                            <span class="material-symbols-outlined text-primary text-lg">swap_vert</span>
+                        </div>
+                        <p id="net-activity" class="text-slate-900 dark:text-white text-2xl font-black leading-tight">-</p>
+                        <div id="activity-detail" class="flex items-center gap-1.5">
+                            <span class="text-slate-400 text-xs">Increased / Decreased positions</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Options Value Card -->
+                    <div class="flex flex-col gap-2 rounded-xl p-5 border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase">Options Value</p>
+                            <span class="material-symbols-outlined text-primary text-lg">layers</span>
+                        </div>
+                        <p id="options-value" class="text-slate-900 dark:text-white text-2xl font-black leading-tight">-</p>
+                        <div id="options-detail" class="flex items-center gap-1.5">
+                            <span class="text-slate-400 text-xs">Total options exposure</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Put/Call Ratio Card -->
+                    <div class="flex flex-col gap-2 rounded-xl p-5 border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] shadow-sm">
+                        <div class="flex justify-between items-start">
+                            <p class="text-slate-500 dark:text-slate-400 text-xs font-bold uppercase">Put/Call Ratio</p>
+                            <span class="material-symbols-outlined text-primary text-lg">balance</span>
+                        </div>
+                        <p id="put-call-ratio" class="text-slate-900 dark:text-white text-2xl font-black leading-tight">-</p>
+                        <div id="ratio-sentiment" class="flex items-center gap-1.5">
+                            <span class="text-slate-400 text-xs">Market sentiment indicator</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tables Section -->
+                <div class="px-8 grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+                    <!-- Top Share Increases -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-200 dark:border-[#283039] flex justify-between items-center bg-slate-50/50 dark:bg-[#1c242c]/50">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-success text-xl">trending_up</span>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Top Share Increases</h3>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">QoQ Growth</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left terminal-table border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3">Company</th>
+                                        <th class="px-4 py-3 text-right">Shares Change</th>
+                                        <th class="px-4 py-3 text-right">% Change</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="increases-table" class="divide-y divide-slate-100 dark:divide-[#283039]">
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                                            No data available. Select a report to analyze.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Top Share Decreases -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-200 dark:border-[#283039] flex justify-between items-center bg-slate-50/50 dark:bg-[#1c242c]/50">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-danger text-xl">trending_down</span>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Top Share Decreases</h3>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">QoQ Exit</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left terminal-table border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3">Company</th>
+                                        <th class="px-4 py-3 text-right">Shares Change</th>
+                                        <th class="px-4 py-3 text-right">% Change</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="decreases-table" class="divide-y divide-slate-100 dark:divide-[#283039]">
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                                            No data available. Select a report to analyze.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Put Options -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-200 dark:border-[#283039] flex justify-between items-center bg-slate-50/50 dark:bg-[#1c242c]/50">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-orange-500 text-xl">vertical_align_bottom</span>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Top Put Options by Value</h3>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Hedging Positions</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left terminal-table border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3">Company (Put)</th>
+                                        <th class="px-4 py-3 text-right">Value</th>
+                                        <th class="px-4 py-3 text-right">Shares</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="puts-table" class="divide-y divide-slate-100 dark:divide-[#283039]">
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                                            No put options data available.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Call Options -->
+                    <div class="rounded-xl border border-slate-200 dark:border-[#3b4754] bg-white dark:bg-[#1a2128] overflow-hidden shadow-sm">
+                        <div class="p-4 border-b border-slate-200 dark:border-[#283039] flex justify-between items-center bg-slate-50/50 dark:bg-[#1c242c]/50">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-blue-500 text-xl">vertical_align_top</span>
+                                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Top Call Options by Value</h3>
+                            </div>
+                            <span class="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Bullish Exposure</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left terminal-table border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="px-4 py-3">Company (Call)</th>
+                                        <th class="px-4 py-3 text-right">Value</th>
+                                        <th class="px-4 py-3 text-right">Shares</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="calls-table" class="divide-y divide-slate-100 dark:divide-[#283039]">
+                                    <tr>
+                                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                                            No call options data available.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let currentData = null;
+        
+        // 格式化货币
+        function formatCurrency(value) {
+            if (value >= 1e12) return `$${(value / 1e12).toFixed(2)}T`;
+            if (value >= 1e9) return `$${(value / 1e9).toFixed(2)}B`;
+            if (value >= 1e6) return `$${(value / 1e6).toFixed(2)}M`;
+            if (value >= 1e3) return `$${(value / 1e3).toFixed(2)}K`;
+            return `$${value.toFixed(2)}`;
+        }
+        
+        // 格式化数字
+        function formatNumber(value) {
+            if (value >= 1e9) return `${(value / 1e9).toFixed(2)}B`;
+            if (value >= 1e6) return `${(value / 1e6).toFixed(2)}M`;
+            if (value >= 1e3) return `${(value / 1e3).toFixed(2)}K`;
+            return value.toLocaleString();
+        }
+        
+        // 加载实体列表
+        async function loadEntities() {
+            try {
+                const response = await fetch(`${API_BASE}/api/entities`);
+                const data = await response.json();
+                
+                const select = document.getElementById('entity-select');
+                
+                if (data.entities.length === 0) {
+                    select.innerHTML = '<option value="">No entities downloaded yet</option>';
+                    return;
+                }
+                
+                select.innerHTML = '<option value="">Select an entity...</option>' + 
+                    data.entities.map(entity => 
+                        `<option value="${entity.cik}" data-name="${entity.name}">${entity.name} (CIK: ${entity.cik})</option>`
+                    ).join('');
+                
+                // 检查URL参数
+                const urlParams = new URLSearchParams(window.location.search);
+                const reportParam = urlParams.get('report');
+                
+                if (reportParam) {
+                    // 从报告文件名解析CIK
+                    const match = reportParam.match(/CIK_(\d+)_/);
+                    if (match) {
+                        const cik = match[1];
+                        select.value = cik.replace(/^0+/, '');
+                        await loadQuarters();
+                        
+                        // 设置季度
+                        const quarterSelect = document.getElementById('quarter-select');
+                        quarterSelect.value = reportParam;
+                        
+                        // 自动分析
+                        analyzeReport();
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error loading entities:', error);
+                document.getElementById('entity-select').innerHTML = 
+                    '<option value="">Error loading entities</option>';
+            }
+        }
+        
+        // 加载季度列表
+        async function loadQuarters() {
+            const entitySelect = document.getElementById('entity-select');
+            const quarterSelect = document.getElementById('quarter-select');
+            const cik = entitySelect.value;
+            
+            if (!cik) {
+                quarterSelect.innerHTML = '<option value="">Select a quarter...</option>';
+                return;
+            }
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/entities`);
+                const data = await response.json();
+                
+                const entity = data.entities.find(e => e.cik === cik);
+                
+                if (entity && entity.quarters.length > 0) {
+                    quarterSelect.innerHTML = '<option value="">Select a quarter...</option>' +
+                        entity.quarters.map(q => 
+                            `<option value="${q.filename}">${q.quarter} (${q.filing_date})</option>`
+                        ).join('');
+                    
+                    // 更新面包屑
+                    document.getElementById('breadcrumb-entity').textContent = entity.name;
+                } else {
+                    quarterSelect.innerHTML = '<option value="">No quarters available</option>';
+                }
+                
+            } catch (error) {
+                console.error('Error loading quarters:', error);
+                quarterSelect.innerHTML = '<option value="">Error loading quarters</option>';
+            }
+        }
+        
+        // 分析报告
+        async function analyzeReport() {
+            const quarterSelect = document.getElementById('quarter-select');
+            const filename = quarterSelect.value;
+            
+            if (!filename) {
+                alert('Please select a quarter to analyze');
+                return;
+            }
+            
+            // 显示加载状态
+            document.getElementById('total-value').textContent = 'Loading...';
+            document.getElementById('net-activity').textContent = 'Loading...';
+            document.getElementById('options-value').textContent = 'Loading...';
+            document.getElementById('put-call-ratio').textContent = 'Loading...';
+            
+            try {
+                const response = await fetch(`${API_BASE}/api/analysis/${encodeURIComponent(filename)}`);
+                const data = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(data.error || 'Analysis failed');
+                }
+                
+                currentData = data;
+                updateDashboard(data);
+                
+            } catch (error) {
+                console.error('Error analyzing report:', error);
+                alert('Error analyzing report: ' + error.message);
+            }
+        }
+        
+        // 更新仪表板
+        function updateDashboard(data) {
+            const summary = data.summary;
+            
+            // 更新标题
+            document.getElementById('quarter-badge').textContent = data.quarter;
+            document.getElementById('breadcrumb-entity').textContent = data.company_name;
+            
+            // 更新Total Value
+            document.getElementById('total-value').textContent = formatCurrency(summary.total_value);
+            
+            const valueChangeEl = document.getElementById('value-change');
+            if (data.has_previous_quarter) {
+                const changePercent = summary.value_change_percent;
+                const isPositive = changePercent >= 0;
+                valueChangeEl.innerHTML = `
+                    <span class="material-symbols-outlined ${isPositive ? 'text-success' : 'text-danger'} text-sm">${isPositive ? 'trending_up' : 'trending_down'}</span>
+                    <p class="${isPositive ? 'text-success' : 'text-danger'} text-xs font-bold">${isPositive ? '+' : ''}${changePercent.toFixed(1)}% <span class="text-slate-400 font-normal ml-1">vs Last Q</span></p>
+                `;
+            } else {
+                valueChangeEl.innerHTML = '<span class="text-slate-400 text-xs">No previous quarter data</span>';
+            }
+            
+            // 更新Net Activity
+            const totalNew = summary.new_positions_count;
+            const incCount = summary.increased_count;
+            const decCount = summary.decreased_count;
+            document.getElementById('net-activity').textContent = `${incCount + totalNew} / ${decCount}`;
+            document.getElementById('activity-detail').innerHTML = `
+                <span class="material-symbols-outlined text-success text-sm">arrow_upward</span>
+                <p class="text-success text-xs font-bold">${incCount + totalNew} Inc / ${decCount} Dec</p>
+            `;
+            
+            // 更新Options Value
+            document.getElementById('options-value').textContent = formatCurrency(summary.options_value);
+            const optionsPercent = (summary.options_value / summary.total_value * 100).toFixed(1);
+            document.getElementById('options-detail').innerHTML = `
+                <span class="material-symbols-outlined text-slate-400 text-sm">info</span>
+                <p class="text-slate-400 text-xs font-bold">${optionsPercent}% of Portfolio</p>
+            `;
+            
+            // 更新Put/Call Ratio
+            document.getElementById('put-call-ratio').textContent = summary.put_call_ratio.toFixed(2);
+            const sentiment = summary.put_call_ratio > 1 ? 'Bearish' : 'Bullish';
+            const sentimentColor = summary.put_call_ratio > 1 ? 'text-danger' : 'text-success';
+            document.getElementById('ratio-sentiment').innerHTML = `
+                <span class="material-symbols-outlined ${sentimentColor} text-sm">${summary.put_call_ratio > 1 ? 'arrow_drop_down' : 'arrow_drop_up'}</span>
+                <p class="${sentimentColor} text-xs font-bold">${sentiment} Sentiment</p>
+            `;
+            
+            // 更新增持表格
+            updateIncreasesTable(data.increases);
+            
+            // 更新减持表格
+            updateDecreasesTable(data.decreases);
+            
+            // 更新期权表格
+            updateOptionsTable('puts-table', data.put_options, 'PUT');
+            updateOptionsTable('calls-table', data.call_options, 'CALL');
+            
+            // 更新同步状态
+            document.getElementById('sync-status').innerHTML = `
+                <div class="flex items-center gap-2 text-primary mb-2">
+                    <span class="material-symbols-outlined text-lg">verified</span>
+                    <span class="text-xs font-bold">Analysis Complete</span>
+                </div>
+                <p class="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+                    ${data.company_name}<br>
+                    Filing Date: ${data.filing_date}<br>
+                    ${data.has_previous_quarter ? 'Compared with previous quarter' : 'No previous quarter data'}
+                </p>
+            `;
+        }
+        
+        // 更新增持表格
+        function updateIncreasesTable(increases) {
+            const tbody = document.getElementById('increases-table');
+            
+            if (!increases || increases.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                            No share increases found vs previous quarter.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = increases.map(item => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-[#212a33] transition-colors">
+                    <td class="px-4 py-3 font-bold text-primary">${item.issuer_name}</td>
+                    <td class="px-4 py-3 text-right font-mono text-success">+${formatNumber(item.share_change)}</td>
+                    <td class="px-4 py-3 text-right font-mono text-success">+${item.percent_change.toFixed(1)}%</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 更新减持表格
+        function updateDecreasesTable(decreases) {
+            const tbody = document.getElementById('decreases-table');
+            
+            if (!decreases || decreases.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                            No share decreases found vs previous quarter.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = decreases.map(item => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-[#212a33] transition-colors">
+                    <td class="px-4 py-3 font-bold text-primary">${item.issuer_name}</td>
+                    <td class="px-4 py-3 text-right font-mono text-danger">${formatNumber(item.share_change)}</td>
+                    <td class="px-4 py-3 text-right font-mono text-danger">${item.percent_change.toFixed(1)}%</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 更新期权表格
+        function updateOptionsTable(tableId, options, type) {
+            const tbody = document.getElementById(tableId);
+            
+            if (!options || options.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="px-4 py-8 text-center text-slate-500 text-xs">
+                            No ${type.toLowerCase()} options found in this filing.
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            tbody.innerHTML = options.map(item => `
+                <tr class="hover:bg-slate-50 dark:hover:bg-[#212a33] transition-colors">
+                    <td class="px-4 py-3 font-bold text-primary">${item.issuer_name} (${type})</td>
+                    <td class="px-4 py-3 text-right font-mono">${formatCurrency(item.value_usd)}</td>
+                    <td class="px-4 py-3 text-right font-mono">${formatNumber(item.shares)}</td>
+                </tr>
+            `).join('');
+        }
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            loadEntities();
+            
+            // 监听实体选择变化
+            document.getElementById('entity-select').addEventListener('change', loadQuarters);
+        });
+    </script>
+</body>
+</html>
