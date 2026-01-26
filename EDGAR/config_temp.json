@@ -1,0 +1,18 @@
+{
+  "form_type": "13F-HR",
+  "companies": {
+    "tickers": "CIK0001423053",
+    "cik": "0001423053"
+  },
+  "download_settings": {
+    "year_range": "2025",
+    "download_directory": "/Users/wonderer/Desktop/Project/13f_web_new/../EDGAR/SEC_Filings"
+  },
+  "conversion_settings": {
+    "enable_json_conversion": true,
+    "json_output_directory": "/Users/wonderer/Desktop/Project/13f_web_new/../EDGAR/JSON_Reports"
+  },
+  "user_agent": {
+    "email": "your_email@example.com"
+  }
+}

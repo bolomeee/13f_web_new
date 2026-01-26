@@ -1,0 +1,30 @@
+{
+  "form_type": "13F-HR",
+  "companies": {
+    "tickers": "BRK-B",
+    "description": "Stock tickers separated by comma. Examples: GOOGL=Alphabet, AAPL=Apple, TSLA=Tesla, MSFT=Microsoft, AMZN=Amazon. For 13F-HR, use institutional investor tickers like BRK-B (Berkshire Hathaway)"
+  },
+  "download_settings": {
+    "year_range": "2024",
+    "download_directory": "SEC_Filings",
+    "description": "year_range supports: '2025' (single year) or '2020-2025' (range including both years)"
+  },
+  "conversion_settings": {
+    "enable_json_conversion": true,
+    "json_output_directory": "JSON_Reports",
+    "description": "JSON conversion settings for creating AI-friendly format"
+  },
+  "user_agent": {
+    "email": "medatj@gmail.com",
+    "description": "Please replace with your actual contact email for SEC compliance"
+  },
+  "cache_settings": {
+    "enable_ticker_cache": true,
+    "cache_file": "ticker_cik_cache.json"
+  },
+  "_comments": {
+    "form_type": "Supported values: '10-K' for annual reports, '13F-HR' for institutional holdings reports",
+    "13f_example_tickers": "BRK.B, JPM, BAC, GS (major institutional investors)",
+    "10k_example_tickers": "AAPL, GOOGL, MSFT, TSLA (public companies)"
+  }
+} 

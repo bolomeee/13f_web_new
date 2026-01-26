@@ -13,7 +13,7 @@ from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 # 添加EDGAR模块路径
-EDGAR_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "EDGAR")
+EDGAR_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "EDGAR")
 sys.path.insert(0, EDGAR_PATH)
 
 from edgar_downloader import EDGARReportDownloader
