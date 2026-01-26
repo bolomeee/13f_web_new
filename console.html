@@ -74,39 +74,31 @@
                 </div>
             </div>
             <nav class="flex-1 px-3 space-y-1">
-                <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary">
+                <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors cursor-pointer">
                     <span class="material-symbols-outlined">database</span>
                     <p class="text-sm font-semibold leading-normal">Management</p>
+                </a>
+
+                <!-- Auto Monitor Link -->
+                <a href="/monitor" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] transition-colors cursor-pointer group">
+                    <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">monitoring</span>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Auto Monitor</p>
                 </a>
                 <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] transition-colors cursor-pointer group">
                     <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">analytics</span>
                     <p class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Analytics</p>
                 </a>
-                <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] transition-colors cursor-pointer group">
-                    <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">insights</span>
-                    <p class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Compliance</p>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] transition-colors cursor-pointer group">
-                    <span class="material-symbols-outlined text-slate-500 group-hover:text-primary transition-colors">history</span>
-                    <p class="text-slate-600 dark:text-slate-300 text-sm font-medium leading-normal">Audit Logs</p>
-                </div>
+                <!-- ... other links ... -->
             </nav>
-            <div class="p-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
-                <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] cursor-pointer group">
-                    <span class="material-symbols-outlined text-slate-500 group-hover:text-primary">settings</span>
-                    <p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Settings</p>
-                </div>
-                <div class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-slate-100 dark:hover:bg-[#1c2127] cursor-pointer group">
-                    <span class="material-symbols-outlined text-slate-500 group-hover:text-primary">help</span>
-                    <p class="text-slate-600 dark:text-slate-300 text-sm font-medium">Help Center</p>
-                </div>
-            </div>
         </aside>
         
+
         <!-- Main Content -->
         <main class="flex-1 overflow-y-auto custom-scrollbar">
-            <!-- Header Section -->
-            <header class="p-8 pb-0">
+            <!-- Management View -->
+            <div id="view-management" class="view-section">
+                <!-- Header Section -->
+                <header class="p-8 pb-0">
                 <div class="flex flex-wrap justify-between items-end gap-4">
                     <div class="flex min-w-72 flex-col gap-1">
                         <p class="text-slate-900 dark:text-white text-4xl font-black leading-tight tracking-[-0.033em]">Management</p>
@@ -283,7 +275,10 @@
                         </div>
                     </div>
                 </div>
-            </section>
+                </section>
+            </div>
+            
+
         </main>
     </div>
 
@@ -720,6 +715,8 @@
                 showStatus('error', `Error: ${error.message}`);
             }
         }
+
+
     </script>
 </body>
 </html>

@@ -158,6 +158,12 @@ def dashboard():
     return send_from_directory(".", "dashboard.html")
 
 
+@app.route("/monitor")
+def monitor():
+    """返回monitor页面"""
+    return send_from_directory(".", "monitor.html")
+
+
 @app.route("/api/download", methods=["POST"])
 def download_13f():
     """下载指定CIK和时间段的13F报告"""
@@ -729,6 +735,182 @@ def get_entities():
         entity["quarters"].sort(key=lambda x: x["filing_date"], reverse=True)
 
     return jsonify({"entities": list(entities.values())})
+
+    return jsonify({"entities": list(entities.values())})
+
+
+# ========== Auto Monitor APIs ==========
+
+MONITOR_CONFIG_PATH = os.path.join(EDGAR_PATH, "monitor_config.json")
+
+
+def load_monitor_config():
+    """加载监控配置"""
+    default_config = {
+        "entities": [],
+        "frequency": "weekly",
+        "last_activity": {
+            "last_check": None,
+            "total_tasks": 0,
+            "success_count": 0,
+            "files_downloaded": 0,
+        },
+    }
+
+    if os.path.exists(MONITOR_CONFIG_PATH):
+        try:
+            with open(MONITOR_CONFIG_PATH, "r") as f:
+                config = json.load(f)
+                for key, value in default_config.items():
+                    if key not in config:
+                        config[key] = value
+                return config
+        except Exception as e:
+            logger.error(f"Error loading monitor config: {e}")
+
+    return default_config
+
+
+def save_monitor_config(config):
+    """保存监控配置"""
+    try:
+        with open(MONITOR_CONFIG_PATH, "w") as f:
+            json.dump(config, f, indent=2)
+        return True
+    except Exception as e:
+        logger.error(f"Error saving monitor config: {e}")
+        return False
+
+
+@app.route("/api/monitor/config", methods=["GET"])
+def get_monitor_config():
+    try:
+        return jsonify(load_monitor_config())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/monitor/add", methods=["POST"])
+def add_monitor_entity():
+    try:
+        data = request.get_json()
+        input_text = data.get("input", "")
+
+        if not input_text:
+            return jsonify({"error": "Configuration input required"}), 400
+
+        config = load_monitor_config()
+        current_ciks = {e["cik"] for e in config["entities"]}
+
+        items = [x.strip() for x in input_text.split(",") if x.strip()]
+        added_count = 0
+
+        for item in items:
+            if item.isdigit():
+                cik = item.zfill(10)
+                if cik not in current_ciks:
+                    name = get_company_name_by_cik(cik)
+                    config["entities"].append(
+                        {
+                            "cik": cik,
+                            "name": name,
+                            "status": "active",
+                            "last_sync": "Pending",
+                        }
+                    )
+                    current_ciks.add(cik)
+                    added_count += 1
+
+        save_monitor_config(config)
+        return jsonify(
+            {
+                "success": True,
+                "added_count": added_count,
+                "entities": config["entities"],
+            }
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/monitor/delete", methods=["POST"])
+def delete_monitor_entities():
+    try:
+        data = request.get_json()
+        ciks_to_delete = data.get("ciks", [])
+
+        config = load_monitor_config()
+        original_count = len(config["entities"])
+        config["entities"] = [
+            e for e in config["entities"] if e["cik"] not in ciks_to_delete
+        ]
+
+        if len(config["entities"]) < original_count:
+            save_monitor_config(config)
+
+        return jsonify({"success": True, "entities": config["entities"]})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/monitor/frequency", methods=["POST"])
+def set_monitor_frequency():
+    try:
+        data = request.get_json()
+        freq = data.get("frequency")
+        if freq not in ["daily", "weekly", "monthly"]:
+            return jsonify({"error": "Invalid frequency"}), 400
+
+        config = load_monitor_config()
+        config["frequency"] = freq
+        save_monitor_config(config)
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/monitor/run", methods=["POST"])
+def run_monitor_check():
+    """执行监控检查并下载报告"""
+    try:
+        config = load_monitor_config()
+        entities = config["entities"]
+
+        downloader = EDGARReportDownloader(config_path=CONFIG_PATH)
+        current_year = datetime.now().year
+
+        success_count = 0
+        downloaded_files = 0
+
+        for entity in entities:
+            cik = entity["cik"]
+            entity["status"] = "syncing"
+            save_monitor_config(config)
+
+            try:
+                # 下载本年度报告
+                files = downloader.download_reports(
+                    ticker_or_cik=cik, report_type="13F-HR", year=str(current_year)
+                )
+                downloaded_files += len(files)
+                success_count += 1
+                entity["status"] = "active"
+                entity["last_sync"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+            except Exception as e:
+                logger.error(f"Monitor check failed for {cik}: {e}")
+                entity["status"] = "error"
+
+        config["last_activity"] = {
+            "last_check": datetime.now().strftime("%H:%M:%S"),
+            "total_tasks": len(entities),
+            "success_count": success_count,
+            "files_downloaded": downloaded_files,
+        }
+
+        save_monitor_config(config)
+        return jsonify({"success": True, "summary": config["last_activity"]})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

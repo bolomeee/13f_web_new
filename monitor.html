@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>13F Auto-Monitor Management</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <!-- Use Inter to match console.html -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <!-- Correct Material Symbols Link -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922", 
+                        // Add some console specific colors for better compatibility
+                        slate: {
+                            850: '#151e29',
+                            900: '#111418',
+                        }
+                    },
+                    fontFamily: {
+                        display: "Inter, sans-serif"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: "Inter", sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #192633; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #324d67; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #137fec; }
+        
+        /* Fail-safe for icons: if font fails, don't break layout */
+        .material-symbols-outlined {
+            display: inline-block;
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 1.2em; 
+            vertical-align: bottom;
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-white font-display h-screen flex overflow-hidden">
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 border-r border-slate-200 dark:border-[#233648] bg-white dark:bg-slate-900 flex flex-col h-screen shrink-0">
+        <div class="p-6">
+            <div class="flex items-center gap-3">
+                <div class="bg-primary rounded-lg p-1.5 flex items-center justify-center text-white">
+                    <!-- SVG for Logo -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-slate-900 dark:text-white text-base font-bold leading-tight">13F Monitor</h1>
+                    <p class="text-slate-500 text-xs font-normal">Financial Terminal</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="flex-1 px-3 space-y-1">
+            <a href="/" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#1c2127] dark:text-[#92adc9] dark:hover:text-white transition-colors group">
+                <!-- SVG Database -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-primary transition-colors"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
+                <span class="text-sm font-medium">Management</span>
+            </a>
+            
+            <!-- Active State -->
+            <a href="/monitor" class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary transition-colors">
+                <!-- SVG Monitor (Activity) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                <span class="text-sm font-medium">Auto Monitor</span>
+            </a>
+
+            <a href="/dashboard" class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-[#1c2127] dark:text-[#92adc9] dark:hover:text-white transition-colors group">
+                <!-- SVG Analytics -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-hover:text-primary transition-colors"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span class="text-sm font-medium">Analytics</span>
+            </a>
+        </nav>
+        
+        <div class="p-4 mt-auto border-t border-slate-200 dark:border-[#233648]">
+            <div class="flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full bg-primary flex items-center justify-center text-xs font-bold text-white">U</div>
+                <div class="flex flex-col overflow-hidden">
+                    <p class="text-sm font-medium text-slate-900 dark:text-white truncate">User</p>
+                    <p class="text-xs text-slate-500 dark:text-[#92adc9] truncate">Admin</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-white dark:bg-[#111418]">
+        <!-- Page Header -->
+        <header class="flex-shrink-0 px-8 py-6 border-b border-slate-200 dark:border-[#233648] bg-white dark:bg-[#111418]">
+            <div class="flex flex-wrap justify-between items-center gap-4">
+                <div class="flex flex-col gap-1">
+                    <h2 class="text-slate-900 dark:text-white text-3xl font-black leading-tight tracking-tight">13F Auto-Monitor Management</h2>
+                    <p class="text-slate-500 dark:text-[#9dabb9] text-base font-normal">Manage and track SEC 13F filing entities in real-time.</p>
+                </div>
+                <button onclick="runMonitorCheck()" id="force-sync-btn" class="bg-primary hover:bg-primary/90 text-white px-5 py-2.5 rounded-lg font-bold flex items-center gap-2 transition-all shadow-lg shadow-primary/20">
+                    <span class="material-symbols-outlined text-xl">sync</span>
+                    Force Manual Sync
+                </button>
+            </div>
+        </header>
+
+        <!-- Scrollable Content -->
+        <div class="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+            <!-- Recent Activity Summary Cards -->
+            <section>
+                <h3 class="text-slate-900 dark:text-white text-sm font-bold uppercase tracking-widest px-1 pb-4 flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                    Recent Activity Summary
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <div class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-5">
+                        <p class="text-slate-500 dark:text-[#92adc9] text-xs font-semibold uppercase mb-1">Last Check</p>
+                        <p class="text-xl font-bold text-slate-900 dark:text-white" id="stat-last-check">-</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-5">
+                        <p class="text-slate-500 dark:text-[#92adc9] text-xs font-semibold uppercase mb-1">Total Tasks</p>
+                        <p class="text-xl font-bold text-slate-900 dark:text-white" id="stat-total-tasks">0</p>
+                        <p class="text-xs text-slate-400 dark:text-[#507a95] mt-1">Configured entities</p>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-5">
+                        <p class="text-slate-500 dark:text-[#92adc9] text-xs font-semibold uppercase mb-1">Success Count</p>
+                        <div class="flex items-center gap-2">
+                            <p class="text-xl font-bold text-slate-900 dark:text-white" id="stat-success-count">0</p>
+                        </div>
+                    </div>
+                    <div class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-5">
+                        <p class="text-slate-500 dark:text-[#92adc9] text-xs font-semibold uppercase mb-1">Files Downloaded</p>
+                        <p class="text-xl font-bold text-slate-900 dark:text-white" id="stat-files-downloaded">0</p>
+                        <p class="text-xs text-slate-400 dark:text-[#507a95] mt-1">New 13F-HR filings</p>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Configuration Section -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-6">
+                    <h3 class="text-slate-900 dark:text-white text-lg font-bold mb-4">Monitor Configuration</h3>
+                    <div class="flex flex-col gap-4">
+                        <label class="flex flex-col gap-2">
+                            <span class="text-slate-500 dark:text-[#92adc9] text-sm font-medium">Add CIKs / Company Names</span>
+                            <textarea id="monitor-input" class="w-full h-32 bg-white dark:bg-[#101922] border border-slate-200 dark:border-[#324d67] rounded-lg p-4 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#507a95] focus:border-primary focus:ring-1 focus:ring-primary outline-none transition-all resize-none" placeholder="Enter multiple CIKs or Company Names separated by commas (e.g., 0001067983, 0001649339, Berkshire Hathaway Inc)"></textarea>
+                        </label>
+                        <div class="flex justify-between items-center mt-2">
+                            <p class="text-xs text-slate-400 dark:text-[#507a95]">Batch limit: 50 entities per submission</p>
+                            <button onclick="addMonitorEntities()" class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg font-bold transition-all flex items-center gap-2">
+                                <span class="material-symbols-outlined text-sm">add</span>
+                                Add to Watchlist
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-slate-900 dark:text-white text-lg font-bold mb-2">Monitoring Frequency</h3>
+                        <p class="text-slate-500 dark:text-[#92adc9] text-sm mb-6">Select how often the system checks for new SEC filings.</p>
+                        <div class="space-y-3">
+                            <label class="flex items-center gap-3 p-3 bg-white dark:bg-[#101922] border border-slate-200 dark:border-[#324d67] rounded-lg cursor-pointer hover:border-primary group transition-all" onclick="setFrequency('daily')">
+                                <input class="w-4 h-4 text-primary bg-transparent border-slate-300 dark:border-[#324d67] focus:ring-primary focus:ring-offset-0" name="freq" type="radio" value="daily" id="freq-daily"/>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-900 dark:text-white">Daily</span>
+                                    <span class="text-xs text-slate-400 dark:text-[#507a95]">Real-time updates every 24h</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-primary/10 border border-primary/50 rounded-lg cursor-pointer group transition-all" onclick="setFrequency('weekly')">
+                                <input class="w-4 h-4 text-primary bg-transparent border-slate-300 dark:border-[#324d67] focus:ring-primary focus:ring-offset-0" name="freq" type="radio" value="weekly" id="freq-weekly"/>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-900 dark:text-white">Weekly</span>
+                                    <span class="text-xs text-slate-400 dark:text-[#507a95]">Consolidated batch every Friday</span>
+                                </div>
+                            </label>
+                            <label class="flex items-center gap-3 p-3 bg-white dark:bg-[#101922] border border-slate-200 dark:border-[#324d67] rounded-lg cursor-pointer hover:border-primary group transition-all" onclick="setFrequency('monthly')">
+                                <input class="w-4 h-4 text-primary bg-transparent border-slate-300 dark:border-[#324d67] focus:ring-primary focus:ring-offset-0" name="freq" type="radio" value="monthly" id="freq-monthly"/>
+                                <div class="flex flex-col">
+                                    <span class="text-sm font-bold text-slate-900 dark:text-white">Monthly</span>
+                                    <span class="text-xs text-slate-400 dark:text-[#507a95]">Quarterly alignment reports</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- Monitored Entities List -->
+            <section class="bg-slate-50 dark:bg-[#192633] border border-slate-200 dark:border-[#233648] rounded-xl overflow-hidden shadow-2xl">
+                <div class="p-6 border-b border-slate-200 dark:border-[#233648] flex flex-wrap justify-between items-center gap-4">
+                    <div class="flex items-center gap-4">
+                        <h3 class="text-slate-900 dark:text-white text-lg font-bold">Monitored Entities</h3>
+                        <span class="bg-slate-200 dark:bg-[#233648] text-slate-500 dark:text-[#92adc9] text-xs font-bold px-2.5 py-1 rounded-full" id="monitor-count">0 Active</span>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="relative">
+                            <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-[#507a95] text-xl">search</span>
+                            <input class="bg-white dark:bg-[#101922] border border-slate-200 dark:border-[#324d67] rounded-lg pl-10 pr-4 py-2 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-[#507a95] focus:border-primary focus:ring-0 w-64" placeholder="Filter entities..." type="text"/>
+                        </div>
+                        <button onclick="deleteMonitorEntities()" class="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-all">
+                            <span class="material-symbols-outlined text-lg">delete</span>
+                            Batch Delete
+                        </button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto max-h-[520px] custom-scrollbar overflow-y-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="sticky top-0 bg-slate-50 dark:bg-[#192633] border-b border-slate-200 dark:border-[#233648] z-10">
+                            <tr>
+                                <th class="p-4 w-10">
+                                    <input class="w-4 h-4 rounded border-slate-300 dark:border-[#324d67] bg-white dark:bg-[#101922] text-primary focus:ring-0 cursor-pointer" type="checkbox" id="monitor-select-all" onclick="toggleMonitorSelectAll()"/>
+                                </th>
+                                <th class="p-4 text-xs font-bold text-slate-500 dark:text-[#92adc9] uppercase tracking-wider">Company Name</th>
+                                <th class="p-4 text-xs font-bold text-slate-500 dark:text-[#92adc9] uppercase tracking-wider">CIK</th>
+                                <th class="p-4 text-xs font-bold text-slate-500 dark:text-[#92adc9] uppercase tracking-wider">Status</th>
+                                <th class="p-4 text-xs font-bold text-slate-500 dark:text-[#92adc9] uppercase tracking-wider">Last Sync</th>
+                                <th class="p-4 text-xs font-bold text-slate-500 dark:text-[#92adc9] uppercase tracking-wider text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 dark:divide-[#233648]" id="monitor-table-body">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-slate-500">Loading data...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        const API_BASE = '';
+        
+        async function loadMonitorConfig() {
+            try {
+                const response = await fetch(`${API_BASE}/api/monitor/config`);
+                const config = await response.json();
+                updateMonitorUI(config);
+            } catch (error) {
+                console.error('Failed to load monitor config:', error);
+            }
+        }
+        
+        function updateMonitorUI(config) {
+            // Update Summary
+            const activity = config.last_activity;
+            if (activity) {
+                document.getElementById('stat-last-check').textContent = activity.last_check || '-';
+                document.getElementById('stat-total-tasks').textContent = activity.total_tasks || 0;
+                document.getElementById('stat-success-count').textContent = activity.success_count || 0;
+                document.getElementById('stat-files-downloaded').textContent = activity.files_downloaded || 0;
+            }
+            
+            // Update Frequency
+            if (config.frequency) {
+                const radio = document.getElementById(`freq-${config.frequency}`);
+                if (radio) radio.checked = true;
+            }
+            
+            // Update Table
+            renderMonitorTable(config.entities);
+        }
+        
+        function renderMonitorTable(entities) {
+            const tbody = document.getElementById('monitor-table-body');
+            const countEl = document.getElementById('monitor-count');
+            if (countEl) countEl.textContent = `${entities ? entities.length : 0} Active`;
+            
+            if (!entities || entities.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="p-8 text-center text-slate-500">
+                            No entities monitored. Add CIKs to get started.
+                        </td>
+                    </tr>`;
+                return;
+            }
+            
+            tbody.innerHTML = entities.map(entity => {
+                let statusBadge = '';
+                if (entity.status === 'active') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-green-500/20 text-green-500"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> Active</span>`;
+                } else if (entity.status === 'syncing') {
+                    statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-primary/20 text-primary"><span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span> Syncing</span>`;
+                } else {
+                     statusBadge = `<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-red-500/20 text-red-500"><span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> Error</span>`;
+                }
+                
+                return `
+                <tr class="hover:bg-slate-100 dark:hover:bg-[#233648]/40 transition-colors">
+                    <td class="p-4 w-10">
+                        <input class="monitor-checkbox w-4 h-4 rounded border-slate-300 dark:border-[#324d67] bg-white dark:bg-[#101922] text-primary focus:ring-0 cursor-pointer" type="checkbox" value="${entity.cik}"/>
+                    </td>
+                    <td class="p-4 text-sm font-medium text-slate-900 dark:text-white">${entity.name || 'Unknown'}</td>
+                    <td class="p-4 text-sm font-mono text-slate-500 dark:text-[#92adc9]">${entity.cik}</td>
+                    <td class="p-4">${statusBadge}</td>
+                    <td class="p-4 text-sm text-slate-500 dark:text-[#92adc9]">${entity.last_sync || 'Pending'}</td>
+                    <td class="p-4 text-right">
+                        <button onclick="runMonitorCheck()" class="text-slate-400 dark:text-[#507a95] hover:text-primary transition-colors" title="Sync now"><span class="material-symbols-outlined text-lg">sync</span></button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+        
+        async function addMonitorEntities() {
+            const input = document.getElementById('monitor-input').value;
+            if (!input) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/monitor/add`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({input})
+                });
+                const data = await res.json();
+                if (data.success) {
+                    document.getElementById('monitor-input').value = '';
+                    loadMonitorConfig();
+                } else {
+                    alert('Error: ' + (data.error || 'Unknown error'));
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        
+        async function deleteMonitorEntities() {
+            const checkboxes = document.querySelectorAll('.monitor-checkbox:checked');
+            const ciks = Array.from(checkboxes).map(cb => cb.value);
+            if (ciks.length === 0) return;
+            
+            // if (!confirm(`Delete ${ciks.length} entities from monitor list?`)) return;
+            
+            try {
+                const res = await fetch(`${API_BASE}/api/monitor/delete`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ciks})
+                });
+                loadMonitorConfig(); 
+                document.getElementById('monitor-select-all').checked = false;
+            } catch (e) { console.error(e); }
+        }
+        
+        async function setFrequency(freq) {
+             try {
+                await fetch(`${API_BASE}/api/monitor/frequency`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({frequency: freq})
+                });
+            } catch (e) { console.error(e); }
+        }
+        
+        async function runMonitorCheck() {
+            const btn = document.getElementById('force-sync-btn');
+            if (btn) {
+                const originalText = btn.innerHTML;
+                btn.innerHTML = `<span class="material-symbols-outlined text-xl animate-spin">refresh</span> Syncing...`;
+                btn.disabled = true;
+                
+                try {
+                    const res = await fetch(`${API_BASE}/api/monitor/run`, {method: 'POST'});
+                    const data = await res.json();
+                    if (data.success) {
+                        loadMonitorConfig();
+                    } else {
+                        alert('Sync failed: ' + data.error);
+                    }
+                } catch (e) {
+                    console.error(e);
+                    alert('Connection error');
+                } finally {
+                    btn.innerHTML = originalText;
+                    btn.disabled = false;
+                }
+            }
+        }
+        
+        function toggleMonitorSelectAll() {
+            const checkAll = document.getElementById('monitor-select-all');
+            document.querySelectorAll('.monitor-checkbox').forEach(cb => cb.checked = checkAll.checked);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', loadMonitorConfig);
+    </script>
+</body>
+</html>
