@@ -94,11 +94,29 @@ class EdgarService:
             search_start_year = filing.year
             search_end_year = filing.year + 1
 
-            filings_list, fetched_company_name = self.downloader._get_filings(
-                filing.cik, "13F-HR", search_start_year, search_end_year
+            # Defines a helper to try finding a filing of a specific type
+            def try_find_filing(form_type):
+                f_list, f_comp_name = self.downloader._get_filings(
+                    filing.cik, form_type, search_start_year, search_end_year
+                )
+
+                # Auto-update company name if available and needed
+                if f_comp_name and f_comp_name != "Unknown":
+                    # We update it in the outer scope's 'filing' object if needed
+                    # checking logic inside the loop or just once is fine
+                    pass
+
+                match = self._find_matching_quarter_filing(
+                    f_list, filing.year, filing.quarter
+                )
+                return match, f_list, f_comp_name
+
+            # First try 13F-HR
+            target_filing, filings_list, fetched_company_name = try_find_filing(
+                "13F-HR"
             )
 
-            # Auto-update company name if generic
+            # Update company name logic (moved here to apply for the first successful fetch)
             if fetched_company_name and fetched_company_name != "Unknown":
                 if (
                     not filing.company_name
@@ -115,16 +133,41 @@ class EdgarService:
                     except Exception as e:
                         logger.warning(f"Failed to commit company name update: {e}")
 
-            target_filing = self._find_matching_quarter_filing(
-                filings_list, filing.year, filing.quarter
-            )
+            # If not found, try 13F-HR/A (Amendment)
+            if not target_filing:
+                logger.info("No 13F-HR found, trying 13F-HR/A...")
+                target_filing, _, _ = try_find_filing("13F-HR/A")
+                if target_filing:
+                    target_filing["formType"] = (
+                        "13F-HR/A"  # Ensure type is set for downloader
+                    )
+                else:
+                    target_filing, _, _ = try_find_filing(
+                        "13F-HR/A"
+                    )  # Retry logic logic fix? No, just the variable name
+                    pass
 
             if not target_filing:
-                raise Exception(
-                    f"No 13F-HR filing found for {filing.year} {filing.quarter}"
+                # Log available filings for debugging
+                available_dates = [f.get("filingDate") for f in filings_list]
+                logger.warning(
+                    f"Failed to find filing for {filing.year} {filing.quarter}. "
+                    f"Available 13F-HR dates in {search_start_year}-{search_end_year}: {available_dates}"
                 )
 
-            # 2. Download and Process
+                # Enhanced User Error Message
+                if fetched_company_name and fetched_company_name != "Unknown":
+                    raise Exception(
+                        f"Successfully found entity '{fetched_company_name}' (CIK {filing.cik}), but NO 13F filings were found for {filing.year} {filing.quarter} (or amendments). "
+                        "This often happens when using an Individual's CIK (who files Form 4) instead of their Firm's CIK (who files 13F). "
+                        "Please verify the CIK."
+                    )
+                else:
+                    raise Exception(
+                        f"No 13F-HR or 13F-HR/A filing found for {filing.year} {filing.quarter}. "
+                        "Please check if the CIK is correct and the company existed/filed in that period."
+                    )
+
             # 2. Download and Process
             # Use company name from DB as placeholder for filename (sanitized)
             safe_company_name = "".join(
@@ -133,8 +176,13 @@ class EdgarService:
             ticker_placeholder = safe_company_name.replace(" ", "_") or "UNKNOWN"
 
             # Call the internal download method
-            # Add formType as expected by the method
-            target_filing["formType"] = "13F-HR"
+            # Ensure formType is set (it might be 13F-HR or 13F-HR/A)
+            if "formType" not in target_filing:
+                target_filing["formType"] = "13F-HR"
+
+            logger.info(
+                f"Dowloading filing type {target_filing['formType']} dated {target_filing['filingDate']}"
+            )
 
             success = self.downloader._download_and_process_13f(
                 ticker_placeholder, filing.cik, target_filing
@@ -148,6 +196,21 @@ class EdgarService:
 
                 # Update file paths
                 filing_date_str = target_filing["filingDate"]
+                form_type_sanitized = target_filing["formType"].replace(
+                    "/", "-"
+                )  # Handle 13F-HR/A -> 13F-HR-A
+
+                # Note: edgar_downloader might save with specific naming convention.
+                # We need to match what downloader uses.
+                # Downloader uses f"{ticker}_CIK_{cik}_FORM_13F-HR_{filing_date}.xml" hardcoded for 13F-HR processing?
+                # Let's check downloader code.
+                # Downloader code: xml_filename = f"{ticker}_CIK_{cik}_FORM_13F-HR_{filing_date}.xml"
+                # It does NOT use the dynamic form_type in the filename for 13F (hardcoded "FORM_13F-HR").
+                # This is a minor issue if we download 13F-HR/A but it saves as 13F-HR.
+                # However, since we are calling _download_and_process_13f directly, let's verify if it uses the passed form_type?
+                # The _download_and_process_13f method uses hardcoded "FORM_13F-HR" in filename generation.
+                # So we should expect the filename to use "FORM_13F-HR".
+
                 xml_filename = f"{ticker_placeholder}_CIK_{filing.cik}_FORM_13F-HR_{filing_date_str}.xml"
                 json_filename = f"{ticker_placeholder}_CIK_{filing.cik}_FORM_13F-HR_{filing_date_str}.json"
 
@@ -206,7 +269,9 @@ class EdgarService:
         """
         Filter filings to find the one corresponding to the report period.
         """
-        for f in filings:
+        # Iterate backwards to find the latest filing (e.g. latest amendment)
+        # Assuming filings is sorted by date ascending.
+        for f in reversed(filings):
             f_date = pd.to_datetime(f["filingDate"])
             f_month = f_date.month
             f_year = f_date.year
@@ -231,8 +296,10 @@ class EdgarService:
                 if f_year == target_year + 1 and 1 <= f_month <= 3:
                     is_match = True
 
-            if is_match:
-                return f
+            # Relaxed heuristic for late filings (e.g. Q3 filed in Jan)
+            # This is risky but helps catch delayed filings.
+            # Only apply if no match found? No, we need to match here.
+            # Let's keep strict for now to avoid ambiguity.
 
             if is_match:
                 return f

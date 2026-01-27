@@ -124,3 +124,177 @@
 2026-01-27 19:14:20,966 - INFO - ✅ 成功提取 110 个持仓记录
 2026-01-27 19:14:20,968 - INFO - ✅ 完成: 110 个持仓, 总市值: $258,701,144,516
 2026-01-27 19:14:21,081 - INFO - Saved 110 holdings to database for filing 10
+2026-01-27 19:26:12,907 - INFO - Starting actual download for Unknown Company (0001336528) 2025 Q3
+2026-01-27 19:26:13,910 - INFO - Updated company name for 0001336528 to: Pershing Square Capital Management, L.P.
+2026-01-27 19:26:13,910 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:26:14,819 - INFO - ✅ 成功提取信息表 (5561 字节)
+2026-01-27 19:26:14,819 - INFO - 💾 保存XML文件: Pershing_Square_Capital_Management_LP_CIK_0001336528_FORM_13F-HR_2025-11-14.xml
+2026-01-27 19:26:14,820 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:26:14,820 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:26:14,820 - INFO - 📊 找到 11 个持仓记录
+2026-01-27 19:26:14,820 - INFO - ✅ 成功提取 11 个持仓记录
+2026-01-27 19:26:14,821 - INFO - ✅ 完成: 11 个持仓, 总市值: $14,643,293,767
+2026-01-27 19:26:14,929 - INFO - Saved 11 holdings to database for filing 11
+2026-01-27 19:26:18,561 - INFO - Starting actual download for Unknown Company (0001336528) 2025 Q2
+2026-01-27 19:26:19,248 - INFO - Updated company name for 0001336528 to: Pershing Square Capital Management, L.P.
+2026-01-27 19:26:19,248 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:26:19,734 - INFO - ✅ 成功提取信息表 (5560 字节)
+2026-01-27 19:26:19,735 - INFO - 💾 保存XML文件: Pershing_Square_Capital_Management_LP_CIK_0001336528_FORM_13F-HR_2025-08-14.xml
+2026-01-27 19:26:19,735 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:26:19,735 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:26:19,735 - INFO - 📊 找到 11 个持仓记录
+2026-01-27 19:26:19,735 - INFO - ✅ 成功提取 11 个持仓记录
+2026-01-27 19:26:19,736 - INFO - ✅ 完成: 11 个持仓, 总市值: $13,729,120,533
+2026-01-27 19:26:19,843 - INFO - Saved 11 holdings to database for filing 12
+2026-01-27 19:28:08,468 - INFO - Starting actual download for Unknown Company (0001040273) 2025 Q3
+2026-01-27 19:28:09,609 - INFO - Updated company name for 0001040273 to: Third Point LLC
+2026-01-27 19:28:09,610 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:28:10,528 - INFO - ✅ 成功提取信息表 (26485 字节)
+2026-01-27 19:28:10,529 - INFO - 💾 保存XML文件: Third_Point_LLC_CIK_0001040273_FORM_13F-HR_2025-11-14.xml
+2026-01-27 19:28:10,529 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:28:10,529 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:28:10,531 - INFO - 📊 找到 46 个持仓记录
+2026-01-27 19:28:10,533 - INFO - ✅ 成功提取 46 个持仓记录
+2026-01-27 19:28:10,535 - INFO - ✅ 完成: 46 个持仓, 总市值: $8,989,033,614
+2026-01-27 19:28:10,666 - INFO - Saved 46 holdings to database for filing 13
+2026-01-27 19:28:14,060 - INFO - Starting actual download for Unknown Company (0001040273) 2025 Q2
+2026-01-27 19:28:14,499 - INFO - Updated company name for 0001040273 to: Third Point LLC
+2026-01-27 19:28:14,499 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:28:14,941 - INFO - ✅ 成功提取信息表 (29169 字节)
+2026-01-27 19:28:14,942 - INFO - 💾 保存XML文件: Third_Point_LLC_CIK_0001040273_FORM_13F-HR_2025-08-14.xml
+2026-01-27 19:28:14,942 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:28:14,943 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:28:15,000 - INFO - 📊 找到 51 个持仓记录
+2026-01-27 19:28:15,002 - INFO - ✅ 成功提取 51 个持仓记录
+2026-01-27 19:28:15,003 - INFO - ✅ 完成: 51 个持仓, 总市值: $7,620,034,147
+2026-01-27 19:28:15,113 - INFO - Saved 51 holdings to database for filing 14
+2026-01-27 19:31:20,790 - INFO - Starting actual download for Unknown Company (0001173334) 2025 Q3
+2026-01-27 19:31:21,187 - INFO - Updated company name for 0001173334 to: PABRAI MOHNISH
+2026-01-27 19:31:21,187 - ERROR - Task failed: No 13F-HR filing found for 2025 Q3
+2026-01-27 19:31:34,523 - INFO - Starting actual download for Unknown Company (0001173334) 2025 Q2
+2026-01-27 19:31:34,868 - INFO - Updated company name for 0001173334 to: PABRAI MOHNISH
+2026-01-27 19:31:34,868 - ERROR - Task failed: No 13F-HR filing found for 2025 Q2
+2026-01-27 19:32:56,132 - INFO - Starting actual download for Unknown Company (0000916119) 2025 Q3
+2026-01-27 19:32:56,544 - INFO - Updated company name for 0000916119 to: DRUCKENMILLER STANLEY F
+2026-01-27 19:32:56,544 - ERROR - Task failed: No 13F-HR filing found for 2025 Q3
+2026-01-27 19:36:13,084 - INFO - Starting actual download for Unknown Company (0001364742) 2025 Q3
+2026-01-27 19:36:13,509 - INFO - Updated company name for 0001364742 to: BlackRock Finance, Inc.
+2026-01-27 19:36:13,509 - ERROR - Task failed: No 13F-HR filing found for 2025 Q3
+2026-01-27 19:36:39,995 - INFO - Starting actual download for Unknown Company (0001364742) 2025 Q1
+2026-01-27 19:36:40,373 - INFO - Updated company name for 0001364742 to: BlackRock Finance, Inc.
+2026-01-27 19:36:40,374 - ERROR - Task failed: No 13F-HR filing found for 2025 Q1
+2026-01-27 19:38:47,318 - INFO - Starting actual download for Unknown Company (0001536411) 2025 Q3
+2026-01-27 19:38:48,141 - INFO - Updated company name for 0001536411 to: Duquesne Family Office LLC
+2026-01-27 19:38:48,141 - INFO - Dowloading filing type 13F-HR dated 2025-11-14
+2026-01-27 19:38:48,141 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:38:49,057 - INFO - ✅ 成功提取信息表 (25372 字节)
+2026-01-27 19:38:49,058 - INFO - 💾 保存XML文件: Duquesne_Family_Office_LLC_CIK_0001536411_FORM_13F-HR_2025-11-14.xml
+2026-01-27 19:38:49,058 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:38:49,059 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:38:49,062 - INFO - 📊 找到 65 个持仓记录
+2026-01-27 19:38:49,069 - INFO - ✅ 成功提取 65 个持仓记录
+2026-01-27 19:38:49,073 - INFO - ✅ 完成: 65 个持仓, 总市值: $4,062,003
+2026-01-27 19:38:49,185 - INFO - Saved 65 holdings to database for filing 17
+2026-01-27 19:38:53,554 - INFO - Starting actual download for Unknown Company (0001536411) 2025 Q2
+2026-01-27 19:38:53,918 - INFO - Updated company name for 0001536411 to: Duquesne Family Office LLC
+2026-01-27 19:38:53,918 - INFO - Dowloading filing type 13F-HR dated 2025-08-15
+2026-01-27 19:38:53,918 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:38:54,389 - INFO - ✅ 成功提取信息表 (26918 字节)
+2026-01-27 19:38:54,390 - INFO - 💾 保存XML文件: Duquesne_Family_Office_LLC_CIK_0001536411_FORM_13F-HR_2025-08-15.xml
+2026-01-27 19:38:54,390 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:38:54,390 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:38:54,391 - INFO - 📊 找到 69 个持仓记录
+2026-01-27 19:38:54,395 - INFO - ✅ 成功提取 69 个持仓记录
+2026-01-27 19:38:54,397 - INFO - ✅ 完成: 69 个持仓, 总市值: $4,071,255
+2026-01-27 19:38:54,570 - INFO - Saved 69 holdings to database for filing 18
+2026-01-27 19:39:53,129 - INFO - Starting actual download for Unknown Company (0001173334) 2025 Q3
+2026-01-27 19:39:53,542 - INFO - Updated company name for 0001173334 to: PABRAI MOHNISH
+2026-01-27 19:39:53,543 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:39:54,336 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:39:54,336 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Checked dates: []
+2026-01-27 19:40:41,608 - INFO - Starting actual download for Unknown Company (0001738693) 2025 Q3
+2026-01-27 19:40:41,927 - INFO - Updated company name for 0001738693 to: Baupost Group GP, L.L.C.
+2026-01-27 19:40:41,927 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:40:42,666 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:40:42,666 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Checked dates: []
+2026-01-27 19:40:49,104 - INFO - Starting actual download for Unknown Company (0001738693) 2025 Q2
+2026-01-27 19:40:49,531 - INFO - Updated company name for 0001738693 to: Baupost Group GP, L.L.C.
+2026-01-27 19:40:49,531 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:40:50,160 - WARNING - Failed to find filing for 2025 Q2. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:40:50,160 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q2. Checked dates: []
+2026-01-27 19:42:11,554 - INFO - Starting actual download for Unknown Company (0002043585) 2025 Q3
+2026-01-27 19:42:11,976 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:42:11,976 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:42:12,298 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:42:12,587 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:42:12,587 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:42:12,587 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Checked dates: []
+2026-01-27 19:46:38,833 - INFO - Starting actual download for Unknown Company (0002043585) 2025 Q3
+2026-01-27 19:46:39,583 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:46:39,583 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:46:39,887 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:46:40,455 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0002043585.json
+2026-01-27 19:46:40,455 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:46:40,455 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Please check if the CIK is correct and the company existed/filed in that period.
+2026-01-27 19:46:58,657 - INFO - Starting actual download for Unknown Company (0001738693) 2025 Q3
+2026-01-27 19:46:58,991 - INFO - Updated company name for 0001738693 to: Baupost Group GP, L.L.C.
+2026-01-27 19:46:58,991 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:46:59,645 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:46:59,645 - ERROR - Task failed: Successfully found entity 'Baupost Group GP, L.L.C.' (CIK 0001738693), but NO 13F filings were found for 2025 Q3 (or amendments). This often happens when using an Individual's CIK (who files Form 4) instead of their Firm's CIK (who files 13F). Please verify the CIK.
+2026-01-27 19:49:26,558 - INFO - Starting actual download for Unknown Company ( 0001709323) 2025 Q3
+2026-01-27 19:49:26,958 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001709323.json
+2026-01-27 19:49:26,959 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:49:27,368 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001709323.json
+2026-01-27 19:49:27,675 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001709323.json
+2026-01-27 19:49:27,675 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:49:27,675 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Please check if the CIK is correct and the company existed/filed in that period.
+2026-01-27 19:50:26,887 - INFO - Starting actual download for Unknown Company (0001709323) 2025 Q3
+2026-01-27 19:50:27,272 - INFO - Updated company name for 0001709323 to: Himalaya Capital Management LLC
+2026-01-27 19:50:27,272 - INFO - Dowloading filing type 13F-HR dated 2025-11-12
+2026-01-27 19:50:27,272 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:50:27,861 - INFO - ✅ 成功提取信息表 (5004 字节)
+2026-01-27 19:50:27,862 - INFO - 💾 保存XML文件: Himalaya_Capital_Management_LLC_CIK_0001709323_FORM_13F-HR_2025-11-12.xml
+2026-01-27 19:50:27,862 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:50:27,862 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:50:27,864 - INFO - 📊 找到 9 个持仓记录
+2026-01-27 19:50:27,866 - INFO - ✅ 成功提取 9 个持仓记录
+2026-01-27 19:50:27,867 - INFO - ✅ 完成: 9 个持仓, 总市值: $3,230,264,839
+2026-01-27 19:50:27,975 - INFO - Saved 9 holdings to database for filing 24
+2026-01-27 19:50:46,982 - INFO - Starting actual download for Unknown Company (0001709323) 2025 Q2
+2026-01-27 19:50:47,345 - INFO - Updated company name for 0001709323 to: Himalaya Capital Management LLC
+2026-01-27 19:50:47,345 - INFO - Dowloading filing type 13F-HR dated 2025-08-14
+2026-01-27 19:50:47,345 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 19:50:47,699 - INFO - ✅ 成功提取信息表 (5004 字节)
+2026-01-27 19:50:47,699 - INFO - 💾 保存XML文件: Himalaya_Capital_Management_LLC_CIK_0001709323_FORM_13F-HR_2025-08-14.xml
+2026-01-27 19:50:47,699 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 19:50:47,699 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 19:50:47,700 - INFO - 📊 找到 9 个持仓记录
+2026-01-27 19:50:47,700 - INFO - ✅ 成功提取 9 个持仓记录
+2026-01-27 19:50:47,700 - INFO - ✅ 完成: 9 个持仓, 总市值: $2,689,202,442
+2026-01-27 19:50:47,808 - INFO - Saved 9 holdings to database for filing 25
+2026-01-27 19:53:02,348 - INFO - Starting actual download for Unknown Company ( 0001697748) 2025 Q4
+2026-01-27 19:53:02,687 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:02,687 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:53:03,023 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:03,333 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:03,334 - WARNING - Failed to find filing for 2025 Q4. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:53:03,334 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q4. Please check if the CIK is correct and the company existed/filed in that period.
+2026-01-27 19:53:06,528 - INFO - Starting actual download for Unknown Company ( 0001697748) 2025 Q3
+2026-01-27 19:53:06,916 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:06,916 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:53:07,324 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:07,633 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:07,633 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:53:07,633 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q3. Please check if the CIK is correct and the company existed/filed in that period.
+2026-01-27 19:53:40,222 - INFO - Starting actual download for Unknown Company ( 0001697748) 2025 Q2
+2026-01-27 19:53:40,604 - ERROR - 获取13F-HR文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:40,604 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:53:40,907 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:41,198 - ERROR - 获取13F-HR/A文件列表时出错: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK%200001697748.json
+2026-01-27 19:53:41,198 - WARNING - Failed to find filing for 2025 Q2. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:53:41,199 - ERROR - Task failed: No 13F-HR or 13F-HR/A filing found for 2025 Q2. Please check if the CIK is correct and the company existed/filed in that period.
+2026-01-27 19:54:10,267 - INFO - Starting actual download for Unknown Company (0001384101) 2025 Q3
+2026-01-27 19:54:10,902 - INFO - Updated company name for 0001384101 to: VERACYTE, INC.
+2026-01-27 19:54:10,902 - INFO - No 13F-HR found, trying 13F-HR/A...
+2026-01-27 19:54:11,683 - WARNING - Failed to find filing for 2025 Q3. Available 13F-HR dates in 2025-2026: []
+2026-01-27 19:54:11,683 - ERROR - Task failed: Successfully found entity 'VERACYTE, INC.' (CIK 0001384101), but NO 13F filings were found for 2025 Q3 (or amendments). This often happens when using an Individual's CIK (who files Form 4) instead of their Firm's CIK (who files 13F). Please verify the CIK.

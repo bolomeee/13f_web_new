@@ -4,73 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>13F 数据管理系统</title>
-    <link href="/static/css/styles.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
                     colors: {
                         primary: '#0a0a0a',
-                        secondary: '#666666'
+                        secondary: '#666666',
+                        'bg-start': '#eff6ff', // rgb(239, 246, 255)
+                        'bg-end': '#eef2ff',   // rgb(238, 242, 255)
+                        'tab-bg': '#ececf0',
+                    },
+                    boxShadow: {
+                        'card': '0px 4px 24px rgba(0, 0, 0, 0.04)',
+                        'tab-active': '0px 3px 8px rgba(0,0,0,0.12), 0px 3px 1px rgba(0,0,0,0.04)',
                     }
                 }
             }
         }
     </script>
+    <style>
+        body {
+            background: linear-gradient(151deg, #eff6ff 0%, #eef2ff 100%);
+        }
+        /* Custom scrollbar for better aesthetics if needed */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
+<body class="min-h-screen text-primary flex justify-center py-6 px-4 sm:px-8 lg:px-[136px]">
+    <div class="w-full max-w-[1280px] flex flex-col gap-6">
         <!-- Header -->
-        <div class="header">
-            <div class="title">13F 数据管理系统</div>
+        <div class="flex flex-col gap-6">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-5.523 0-10 1.79-10 4s4.477 4 10 4 10-1.79 10-4-4.477-4-10-4z"/><path d="M22 6c0 2.21-4.477 4-10 4s-10-1.79-10-4"/><path d="M22 10c0 2.21-4.477 4-10 4s-10-1.79-10-4"/><path d="M22 14c0 2.21-4.477 4-10 4s-10-1.79-10-4"/></svg>
+                </div>
+                <h1 class="text-[24px] font-semibold text-primary tracking-tight">13F 数据管理系统</h1>
+            </div>
             
-            <div class="tabs">
-                <a href="/" class="tab-link active">管理</a>
-                <a href="/data" class="tab-link">数据展示</a>
-                <!-- <a href="#" class="tab-link">自动刷新</a> -->
+            <div class="flex bg-tab-bg p-1 rounded-xl w-full">
+                <a href="/" class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-primary bg-white shadow-sm transition-all">管理</a>
+                <a href="/data" class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-secondary hover:text-primary transition-all hover:bg-white/50">数据展示</a>
+                <div class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-gray-400 cursor-not-allowed">自动刷新</div>
             </div>
         </div>
 
         <!-- Download Card -->
-        <div class="card">
-            <div class="card-header">
-                <div class="card-title">下载 13F 数据</div>
-                <div class="card-subtitle">选择公司和时间范围以下载 13F 报告数据</div>
+        <div class="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 w-full">
+            <div class="mb-8">
+                <div class="text-lg font-semibold mb-1">下载 13F 数据</div>
+                <div class="text-sm text-secondary">选择公司和时间范围以下载 13F 报告数据</div>
             </div>
             
-            <form id="downloadForm" class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">公司名称 (可选)</label>
-                    <input type="text" name="company_name" class="form-input" placeholder="例如: Berkshire Hathaway">
+            <form id="downloadForm" class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                <!-- Row 1 -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-gray-700">公司名称 (可选)</label>
+                    <input type="text" name="company_name" class="h-12 border-0 rounded-xl px-4 text-sm bg-gray-100 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400" placeholder="例如: Berkshire Hathaway">
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">CIK 编号</label>
-                    <input type="text" name="cik" class="form-input" placeholder="例如: 0001067983">
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-gray-700">CIK 编号</label>
+                    <input type="text" name="cik" class="h-12 border-0 rounded-xl px-4 text-sm bg-gray-100 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all placeholder-gray-400" placeholder="例如: 0001067983">
+                    <p class="text-xs text-secondary mt-1 ml-1">请使用机构管理公司的 CIK (如 0001067983)，勿使用个人或 GP 的 CIK。</p>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">年份</label>
-                    <select name="year" class="form-select">
-                        <option value="2025">2025</option>
-                        <option value="2024" selected>2024</option>
-                        <option value="2023">2023</option>
-                    </select>
+                <!-- Row 2 -->
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-gray-700">年份</label>
+                    <div class="relative">
+                        <select name="year" class="w-full h-12 border-0 rounded-xl px-4 text-sm bg-gray-100 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer">
+                            <option value="2025">2025</option>
+                            <option value="2024" selected>2024</option>
+                            <option value="2023">2023</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">季度</label>
-                    <select name="quarter" class="form-select">
-                        <option value="Q1">Q1</option>
-                        <option value="Q2">Q2</option>
-                        <option value="Q3">Q3</option>
-                        <option value="Q4">Q4</option>
-                    </select>
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm font-medium text-gray-700">季度</label>
+                    <div class="relative">
+                        <select name="quarter" class="w-full h-12 border-0 rounded-xl px-4 text-sm bg-gray-100 focus:bg-white focus:ring-2 focus:ring-indigo-500/20 transition-all appearance-none cursor-pointer">
+                            <option value="Q1">Q1</option>
+                            <option value="Q2">Q2</option>
+                            <option value="Q3">Q3</option>
+                            <option value="Q4">Q4</option>
+                        </select>
+                        <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
+                            <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <button type="button" onclick="submitDownload()" class="btn-primary">
+                <!-- Action Row -->
+                <div class="md:col-span-2 mt-2">
+                    <button type="button" onclick="submitDownload()" class="h-10 bg-black text-white rounded-lg px-6 font-medium text-sm flex items-center justify-center gap-2 hover:opacity-90 active:scale-95 transition-all w-fit">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
                         下载数据
                     </button>
@@ -79,33 +133,37 @@
         </div>
 
         <!-- List Card -->
-        <div class="card">
-            <div class="card-header flex justify-between items-center" style="display: flex; justify-content: space-between;">
+        <div class="bg-white rounded-[24px] p-8 shadow-sm border border-gray-100 w-full">
+            <div class="flex justify-between items-center mb-6">
                 <div>
-                    <div class="card-title">已下载数据</div>
-                    <div class="card-subtitle">管理和查看已下载的 13F 报告数据</div>
+                    <div class="text-lg font-semibold mb-1">已下载数据</div>
+                    <div class="text-sm text-secondary">管理和查看已下载的 13F 报告数据</div>
                 </div>
-                <button id="btnDelete" onclick="deleteSelected()" class="btn-primary bg-red-500 hidden" style="background-color:#ef4444; color:white;">
+                <button id="btnDelete" onclick="deleteSelected()" class="hidden h-9 bg-red-500 text-white rounded-lg px-4 text-xs font-medium hover:bg-red-600 transition-colors flex items-center gap-2">
                     删除选中项
                 </button>
             </div>
             
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th width="40"><input type="checkbox" id="selectAll" onchange="toggleAll(this)"></th>
-                        <th>CIK</th>
-                        <th>公司名称</th>
-                        <th>年份</th>
-                        <th>季度</th>
-                        <th>状态</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="filingsTableBody">
-                    <tr><td colspan="7" class="text-center py-8 text-gray-400" style="text-align: center; color:#999;">加载中...</td></tr>
-                </tbody>
-            </table>
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-100">
+                            <th class="text-left py-4 px-4 w-10">
+                                <input type="checkbox" id="selectAll" onchange="toggleAll(this)" class="rounded border-gray-300 text-black focus:ring-black h-4 w-4">
+                            </th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">CIK</th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">公司名称</th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">年份</th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">季度</th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">状态</th>
+                            <th class="text-left py-4 px-4 text-xs font-medium text-gray-500 uppercase tracking-wider">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="filingsTableBody">
+                        <tr><td colspan="7" class="text-center py-12 text-gray-400">加载中...</td></tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -119,20 +177,29 @@
                 tbody.innerHTML = '';
                 
                 if (filings.length === 0) {
-                     tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-gray-400" style="text-align:center; padding: 24px;">暂无数据</td></tr>';
+                     tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-gray-400">暂无数据</td></tr>';
                      return;
                 }
                 
                 filings.forEach(f => {
+                    // Map statuses to visual styles
+                    const statusStyles = {
+                        'completed': 'bg-blue-100 text-blue-800',
+                        'processing': 'bg-emerald-100 text-emerald-800',
+                        'failed': 'bg-red-100 text-red-800',
+                        'pending': 'bg-gray-100 text-gray-600'
+                    };
+                    const statusClass = statusStyles[f.status.toLowerCase()] || statusStyles['pending'];
+
                     const row = `
-                        <tr>
-                            <td><input type="checkbox" class="row-checkbox" value="${f.id}" onchange="updateDeleteState()"></td>
-                            <td class="font-mono text-gray-500">${f.cik}</td>
-                            <td class="font-medium">${f.company_name}</td>
-                            <td>${f.year}</td>
-                            <td>${f.quarter}</td>
-                            <td><span class="status-badge status-${f.status.toLowerCase()}">${f.status}</span></td>
-                            <td><a href="#" class="text-blue-600">查看</a></td>
+                        <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
+                            <td class="py-4 px-4"><input type="checkbox" class="row-checkbox rounded border-gray-300 text-black focus:ring-black" value="${f.id}" onchange="updateDeleteState()"></td>
+                            <td class="py-4 px-4 font-mono text-gray-500 text-sm">${f.cik}</td>
+                            <td class="py-4 px-4 font-medium text-primary">${f.company_name}</td>
+                            <td class="py-4 px-4 text-sm text-secondary">${f.year}</td>
+                            <td class="py-4 px-4 text-sm text-secondary">${f.quarter}</td>
+                            <td class="py-4 px-4"><span class="px-2.5 py-1 rounded-md text-xs font-medium ${statusClass}">${f.status}</span></td>
+                            <td class="py-4 px-4"><a href="#" class="text-blue-600 hover:text-blue-800 text-sm font-medium transition-colors">查看</a></td>
                         </tr>
                     `;
                     tbody.innerHTML += row;
@@ -147,6 +214,11 @@
             if (!data.cik) { alert('请输入 CIK'); return; }
             if (!data.company_name) data.company_name = "Unknown Company";
 
+            const btn = form.querySelector('button');
+            const originalContent = btn.innerHTML;
+            btn.innerHTML = '<span class="animate-spin mr-2">⟳</span> 提交中...';
+            btn.disabled = true;
+
             try {
                 const res = await fetch('/api/filings', {
                     method: 'POST',
@@ -155,8 +227,13 @@
                 });
                 if (res.ok) { 
                     loadFilings();
+                    // Optional: reset form or show success toast
                 } else { alert('提交失败'); }
             } catch (e) { alert('系统错误'); }
+            finally {
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }
         }
 
         // --- Batch Delete ---
@@ -169,7 +246,7 @@
             const btn = document.getElementById('btnDelete');
             if (count > 0) {
                 btn.classList.remove('hidden');
-                btn.textContent = `删除选中 (${count})`;
+                btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg> 删除选中 (${count})`;
             } else {
                 btn.classList.add('hidden');
             }
