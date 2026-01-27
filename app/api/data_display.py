@@ -75,80 +75,93 @@ async def get_comparison_data(
         ).all()
 
     # 5. Compare Logic
-    # Map by CUSIP (or issuer+class if CUSIP missing, but CUSIP is standard)
+    # Compare Logic
     prev_map = {h.cusip: h for h in prev_holdings}
     curr_map = {h.cusip: h for h in current_holdings}
 
-    result = {
-        "metadata": {
-            "current": {
-                "year": year,
-                "quarter": quarter,
-                "filing_date": current_filing.filing_date,
-            },
-            "previous": {
-                "year": prev_year,
-                "quarter": prev_quarter,
-                "filing_date": prev_filing.filing_date if prev_filing else None,
-            },
-        },
-        "holdings": [],
-        "stats": {
-            "total_value": sum(h.value_usd for h in current_holdings),
-            "total_count": len(current_holdings),
-            "new_count": 0,
-            "increased_count": 0,
-            "decreased_count": 0,
-            "sold_count": 0,
-        },
-    }
+    # Lists for analysis
+    increased_list = []
+    decreased_list = []
+    call_list = []
+    put_list = []
 
-    # Process Current Holdings (New, Increased, Decreased, Unchanged)
+    # Process Current Holdings
     for cusip, curr_h in curr_map.items():
         prev_h = prev_map.get(cusip)
 
-        item = {
-            "issuer": curr_h.issuer_name,
-            "class": curr_h.title_of_class,
-            "cusip": curr_h.cusip,
-            "value": curr_h.value_usd,
-            "shares": curr_h.shares_amount,
-            "put_call": curr_h.put_call,
-            "change_type": "unchanged",
-            "shares_change": 0,
-        }
+        # Options check
+        if curr_h.put_call == "CALL":
+            call_list.append(curr_h)
+        elif curr_h.put_call == "PUT":
+            put_list.append(curr_h)
 
-        if not prev_h:
-            item["change_type"] = "new"
-            item["shares_change"] = curr_h.shares_amount
-            result["stats"]["new_count"] += 1
-        else:
+        # Change check
+        change_pct = 0.0
+        diff = 0
+        if prev_h:
             diff = curr_h.shares_amount - prev_h.shares_amount
-            item["shares_change"] = diff
-            if diff > 0:
-                item["change_type"] = "increased"
-                result["stats"]["increased_count"] += 1
-            elif diff < 0:
-                item["change_type"] = "decreased"
-                result["stats"]["decreased_count"] += 1
-            # else unchanged
+            if prev_h.shares_amount > 0:
+                change_pct = (diff / prev_h.shares_amount) * 100
+            else:
+                change_pct = 100.0  # Treat new from 0 as 100%? Or handle separately?
+        else:
+            diff = curr_h.shares_amount
+            change_pct = 100.0  # New position
 
-        result["holdings"].append(item)
+        # Only track significant changes for main lists
+        # Filter out options from main change lists if needed? usually strictly equity.
+        # But for now assume all.
+        # Note: Options might have huge % swings.
 
-    # Process Sold Out (In Prev but not in Curr)
-    for cusip, prev_h in prev_map.items():
-        if cusip not in curr_map:
-            item = {
-                "issuer": prev_h.issuer_name,
-                "class": prev_h.title_of_class,
-                "cusip": prev_h.cusip,
-                "value": 0,
-                "shares": 0,
-                "put_call": prev_h.put_call,
-                "change_type": "sold",
-                "shares_change": -prev_h.shares_amount,
-            }
-            result["holdings"].append(item)
-            result["stats"]["sold_count"] += 1
+        if diff > 0:
+            increased_list.append(
+                {
+                    "issuer": curr_h.issuer_name,
+                    "ticker": curr_h.issuer_name,  # User requested Company Name in bold
+                    "change_pct": change_pct,
+                }
+            )
+        elif diff < 0:
+            decreased_list.append(
+                {
+                    "issuer": curr_h.issuer_name,
+                    "ticker": curr_h.issuer_name,  # User requested Company Name in bold
+                    "change_pct": change_pct,
+                }
+            )
 
-    return result
+    # Sort Lists
+    # Top 10 Increased
+    increased_list.sort(key=lambda x: x["change_pct"], reverse=True)
+    top_increased = increased_list[:10]
+
+    # Top 10 Decreased (most negative first)
+    decreased_list.sort(key=lambda x: x["change_pct"])
+    top_decreased = decreased_list[:10]
+
+    # Top 10 Calls (Value)
+    call_list.sort(key=lambda x: x.value_usd, reverse=True)
+    top_calls = [
+        {"issuer": h.issuer_name, "ticker": h.issuer_name, "value": h.value_usd}
+        for h in call_list[:10]
+    ]
+
+    # Top 10 Puts (Value)
+    put_list.sort(key=lambda x: x.value_usd, reverse=True)
+    top_puts = [
+        {"issuer": h.issuer_name, "ticker": h.issuer_name, "value": h.value_usd}
+        for h in put_list[:10]
+    ]
+
+    return {
+        "metadata": {
+            "current": {"year": year, "quarter": quarter},
+            "previous": {"year": prev_year, "quarter": prev_quarter},
+        },
+        "analysis": {
+            "top_increased": top_increased,
+            "top_decreased": top_decreased,
+            "top_calls": top_calls,
+            "top_puts": top_puts,
+        },
+    }

@@ -3,120 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>13F 数据管理系统 - 数据展示</title>
+    <title>13F 数据展示</title>
     <link href="/static/css/styles.css" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         primary: '#0a0a0a',
-                        secondary: '#666666'
+                        secondary: '#666666',
+                        accent: '#3b82f6',
+                        'card-bg': '#ffffff',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    <style>
+        body {
+            background: linear-gradient(180deg, #F3F4F6 0%, #EFF6FF 100%);
+            min-height: 100vh;
+        }
+    </style>
 </head>
-<body>
-    <div class="container">
+<body class="p-8 flex justify-center text-slate-800">
+    
+    <div class="w-full max-w-[1440px] flex flex-col gap-6">
+        
         <!-- Header -->
-        <div class="header">
-            <div class="title">13F 数据管理系统</div>
-            
-            <div class="tabs">
-                <a href="/" class="tab-link">管理</a>
-                <a href="/data" class="tab-link active">数据展示</a>
-                <!-- <a href="#" class="tab-link">自动刷新</a> -->
+        <div class="flex justify-between items-center bg-white/50 backdrop-blur-sm p-4 rounded-2xl shadow-sm border border-white/50 mb-2">
+            <div class="flex items-center gap-3">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-blue-600">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <div class="text-xl font-semibold text-slate-900">13F 数据管理系统</div>
             </div>
+            
+            <div class="flex bg-slate-100 p-1 rounded-xl">
+                <a href="/" class="px-6 py-1.5 rounded-lg text-sm font-medium text-slate-500 hover:text-slate-900 transition-colors">管理</a>
+                <a href="/data" class="px-6 py-1.5 rounded-lg text-sm font-medium bg-white text-slate-900 shadow-sm">数据展示</a>
+                <!-- <a href="#" class="px-6 py-1.5 rounded-lg text-sm font-medium text-slate-500">自动刷新</a> -->
+            </div>
+            
+            <div class="w-8"></div> <!-- Spacer for balance -->
         </div>
 
-        <div style="display: flex; gap: 24px; align-items: flex-start;">
-            <!-- Sidebar -->
-            <div class="card sidebar">
-                <div class="card-header border-b pb-4 mb-4">
-                    <div class="card-title">筛选面板</div>
+        <div class="flex flex-col lg:flex-row gap-6 items-start">
+            
+            <!-- Sidebar: Query -->
+            <div class="w-full lg:w-[320px] bg-white rounded-2xl p-6 shadow-sm border border-slate-100 shrink-0">
+                <div class="mb-6">
+                    <h2 class="text-lg font-semibold text-slate-900">查询条件</h2>
+                    <p class="text-xs text-slate-500 mt-1">选择公司和季度查看13F数据</p>
                 </div>
                 
-                <div class="flex flex-col gap-4">
-                    <div class="form-group">
-                        <label class="form-label">选择公司</label>
-                        <select id="filter-cik" class="form-select" onchange="loadFilesForCompany()">
+                <div class="flex flex-col gap-5">
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-slate-700">选择公司</label>
+                        <select id="filter-cik" class="w-full h-11 px-3 bg-slate-50 border border-slate-200 rounded-lg text-sm focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 appearance-none">
                             <option value="">加载中...</option>
                         </select>
                     </div>
-                    <div class="grid grid-cols-2 gap-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                        <div class="form-group">
-                            <label class="form-label">目标年份</label>
-                            <select id="filter-year" class="form-select">
-                                <option value="2025">2025</option>
-                                <option value="2024" selected>2024</option>
+
+                    <div class="flex flex-col gap-2">
+                        <label class="text-sm font-medium text-slate-700">选择季度</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <select id="filter-year" class="h-11 px-3 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+                                <option value="2025" selected>2025</option>
+                                <option value="2024">2024</option>
                                 <option value="2023">2023</option>
                             </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">目标季度</label>
-                            <select id="filter-quarter" class="form-select">
+                            <select id="filter-quarter" class="h-11 px-3 bg-slate-50 border border-slate-200 rounded-lg text-sm">
                                 <option value="Q1">Q1</option>
                                 <option value="Q2">Q2</option>
-                                <option value="Q3" selected>Q3</option>
-                                <option value="Q4">Q4</option>
+                                <option value="Q3">Q3</option>
+                                <option value="Q4" selected>Q4</option>
                             </select>
                         </div>
                     </div>
 
-                    <button onclick="loadComparisonData()" class="btn-primary w-full justify-center">
-                        查看对比分析
+                    <button onclick="loadComparisonData()" class="w-full h-11 bg-slate-900 hover:bg-slate-800 text-white font-medium rounded-lg mt-2 transition-transform active:scale-[0.98]">
+                        查询数据
                     </button>
                 </div>
+            </div>
 
-                <div class="mt-8 border-t pt-4" style="margin-top: 32px; border-top: 1px solid #f3f4f6; padding-top: 16px;">
-                    <div class="card-subtitle mb-4">本季变动概览</div>
-                    <div class="stats-grid">
-                        <div class="stats-item"><span>总持仓</span><span id="stat-count" class="font-bold">-</span></div>
-                        <div class="stats-item" style="color:#059669;"><span>新增 (New)</span><span id="stat-new" class="font-bold">-</span></div>
-                        <div class="stats-item" style="color:#2563eb;"><span>增持 (Inc)</span><span id="stat-inc" class="font-bold">-</span></div>
-                        <div class="stats-item" style="color:#d97706;"><span>减持 (Dec)</span><span id="stat-dec" class="font-bold">-</span></div>
-                        <div class="stats-item" style="color:#dc2626;"><span>清仓 (Sold)</span><span id="stat-sold" class="font-bold">-</span></div>
+            <!-- Main Content: Grid -->
+            <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+                
+                <!-- Card 1: Decrease -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col h-[420px]">
+                    <div class="flex items-center gap-2 mb-1">
+                        <svg class="text-red-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"></polyline><polyline points="17 18 23 18 23 12"></polyline></svg>
+                        <h3 class="font-medium text-slate-900">持仓减少 Top 10</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">当前季度与上一季度相比持仓股数减少</p>
+                    
+                    <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <div id="list-decreased" class="flex flex-col gap-3">
+                            <!-- Items -->
+                            <div class="text-center text-gray-400 py-8 text-sm">请查询数据</div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Main Content -->
-            <div class="card main-content" style="min-height: 600px;">
-                <div class="card-header border-b pb-4 mb-4">
-                    <div class="card-title">持仓明细 (vs 上季度)</div>
-                    <div class="card-subtitle" id="data-subtitle">请选择公司和季度进行查看</div>
+                <!-- Card 2: Increase -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col h-[420px]">
+                    <div class="flex items-center gap-2 mb-1">
+                        <svg class="text-green-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+                        <h3 class="font-medium text-slate-900">持仓增加 Top 10</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">当前季度与上一季度相比持仓股数增加</p>
+                    
+                    <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <div id="list-increased" class="flex flex-col gap-3">
+                            <div class="text-center text-gray-400 py-8 text-sm">请查询数据</div>
+                        </div>
+                    </div>
                 </div>
-                
-                <div style="overflow-x: auto;">
-                    <table class="data-table w-full">
-                        <thead>
-                            <tr>
-                                <th>标的 (Issuer)</th>
-                                <th>CUSIP</th>
-                                <th>类别</th>
-                                <th class="text-right">市值 ($)</th>
-                                <th class="text-right">持仓量</th>
-                                <th class="text-right">变化</th>
-                                <th class="text-center">期权</th>
-                            </tr>
-                        </thead>
-                        <tbody id="comparisonBody">
-                            <tr><td colspan="7" class="text-center py-12 text-gray-400" style="text-align: center; padding: 48px; color: #999;">请选择条件并点击分析</td></tr>
-                        </tbody>
-                    </table>
+
+                <!-- Card 3: Call Options -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col h-[420px]">
+                    <div class="flex items-center gap-2 mb-1">
+                        <svg class="text-blue-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                        <h3 class="font-medium text-slate-900">Call Options Top 10</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">看涨期权持仓总额排名</p>
+                    
+                    <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <div id="list-calls" class="flex flex-col gap-3">
+                            <div class="text-center text-gray-400 py-8 text-sm">请查询数据</div>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Card 4: Put Options -->
+                <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex flex-col h-[420px]">
+                    <div class="flex items-center gap-2 mb-1">
+                        <svg class="text-purple-500" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg>
+                        <h3 class="font-medium text-slate-900">Put Options Top 10</h3>
+                    </div>
+                    <p class="text-xs text-slate-400 mb-6">看跌期权持仓总额排名</p>
+                    
+                    <div class="flex-1 overflow-y-auto pr-2 custom-scrollbar">
+                        <div id="list-puts" class="flex flex-col gap-3">
+                            <div class="text-center text-gray-400 py-8 text-sm">请查询数据</div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
+
     </div>
 
-    <!-- Logic -->
     <script>
-        // Init
+        // --- Logic ---
         loadCompanies();
-
+        
+        // Mock data or load real data
         async function loadCompanies() {
             try {
                 const res = await fetch('/api/data/companies');
@@ -136,58 +186,72 @@
             
             if (!cik) { alert("请先选择一家公司"); return; }
             
-            const tbody = document.getElementById('comparisonBody');
-            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-gray-500" style="text-align: center; padding: 48px;">正在分析数据...</td></tr>';
+            // Set loading state
+            ['increased', 'decreased', 'calls', 'puts'].forEach(id => {
+                document.getElementById(`list-${id}`).innerHTML = '<div class="text-center text-gray-400 py-12">加载中...</div>';
+            });
             
             try {
                 const res = await fetch(`/api/data/comparison?cik=${cik}&year=${year}&quarter=${quarter}`);
-                if (!res.ok) throw new Error("无法获取对比数据，请确认数据完整。");
-                
+                if (!res.ok) throw new Error("无法获取对比数据");
                 const data = await res.json();
                 
-                // Stats
-                document.getElementById('stat-count').textContent = data.stats.total_count;
-                document.getElementById('stat-new').textContent = data.stats.new_count;
-                document.getElementById('stat-inc').textContent = data.stats.increased_count;
-                document.getElementById('stat-dec').textContent = data.stats.decreased_count;
-                document.getElementById('stat-sold').textContent = data.stats.sold_count;
+                renderList('list-decreased', data.analysis.top_decreased, 'change', 'bg-red-500', 'text-red-500');
+                renderList('list-increased', data.analysis.top_increased, 'change', 'bg-green-500', 'text-green-500');
+                renderList('list-calls', data.analysis.top_calls, 'value', 'bg-blue-500', 'text-blue-500');
+                renderList('list-puts', data.analysis.top_puts, 'value', 'bg-purple-500', 'text-purple-500');
                 
-                document.getElementById('data-subtitle').textContent = 
-                    `${data.metadata.current.year} ${data.metadata.current.quarter} vs 上个季度`;
-
-                // Table
-                tbody.innerHTML = '';
-                data.holdings.forEach(h => {
-                    const changeVal = h.shares_change;
-                    let changeColor = 'text-gray-400';
-                    let changePrefix = '';
-                    
-                    if (changeVal > 0) { changeColor = 'text-green-600'; changePrefix = '+'; }
-                    else if (changeVal < 0) { changeColor = 'text-red-500'; }
-                    
-                    let putCallBadge = '-';
-                    if (h.put_call === 'PUT') putCallBadge = '<span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs border border-red-100 font-bold">PUT</span>';
-                    else if (h.put_call === 'CALL') putCallBadge = '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs border border-blue-100 font-bold">CALL</span>';
-
-                    const row = `
-                        <tr class="hover:bg-gray-50 transition-colors ${h.change_type === 'sold' ? 'opacity-60 bg-gray-50' : ''}">
-                            <td class="font-medium text-gray-900">${h.issuer}</td>
-                            <td class="font-mono text-xs text-gray-500">${h.cusip}</td>
-                            <td class="text-xs text-gray-500">${h.class}</td>
-                            <td class="text-right font-mono text-gray-700">$${h.value.toLocaleString()}</td>
-                            <td class="text-right font-mono">${h.shares.toLocaleString()}</td>
-                            <td class="text-right font-mono font-medium ${changeColor}">
-                                ${changePrefix}${changeVal !== 0 ? changeVal.toLocaleString() : '-'}
-                            </td>
-                            <td class="text-center">${putCallBadge}</td>
-                        </tr>
-                    `;
-                    tbody.innerHTML += row;
-                });
-
             } catch(e) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-red-500" style="text-align: center; padding: 48px;">${e.message}</td></tr>`;
+                alert(e.message);
+                ['increased', 'decreased', 'calls', 'puts'].forEach(id => {
+                    document.getElementById(`list-${id}`).innerHTML = '<div class="text-center text-red-400 py-12">数据加载失败</div>';
+                });
             }
+        }
+
+        function renderList(containerId, items, type, bgClass, textClass) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            if (!items || items.length === 0) {
+                container.innerHTML = '<div class="text-center text-gray-400 py-12 text-sm">无相关数据</div>';
+                return;
+            }
+
+            items.forEach((item, index) => {
+                const rank = index + 1;
+                let valueDisplay = '';
+                let bgLight = '';
+                
+                if (type === 'change') {
+                    const sign = item.change_pct > 0 ? '+' : '';
+                    valueDisplay = `${sign}${item.change_pct.toFixed(2)}%`;
+                    // Specific background for decrease/increase panels if needed, generally kept simple white or light gray hover
+                    bgLight = bgClass.replace('500', '50');
+                } else {
+                    // Value formatting
+                    valueDisplay = '$' + item.value.toLocaleString();
+                    bgLight = bgClass.replace('500', '50');
+                }
+
+                // Layout
+                const row = `
+                    <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100/50 hover:border-slate-200 transition-colors">
+                        <div class="flex items-center gap-3 overflow-hidden">
+                            <div class="w-6 h-6 rounded-full ${bgClass} text-white flex items-center justify-center text-xs font-bold shrink-0">
+                                ${rank}
+                            </div>
+                            <div class="flex flex-col overflow-hidden">
+                                <div class="font-bold text-slate-800 truncate text-sm" title="${item.ticker}">${item.ticker}</div> 
+                            </div>
+                        </div>
+                        <div class="font-mono font-medium ${textClass} text-sm whitespace-nowrap ml-2">
+                            ${valueDisplay}
+                        </div>
+                    </div>
+                `;
+                container.innerHTML += row;
+            });
         }
     </script>
 </body>
