@@ -48,3 +48,25 @@
 2026-01-27 18:42:12,864 - INFO - ✅ 成功提取 585 个持仓记录
 2026-01-27 18:42:12,871 - INFO - ✅ 完成: 585 个持仓, 总市值: $24,791,713,463
 2026-01-27 18:42:13,016 - INFO - Saved 585 holdings to database for filing 3
+2026-01-27 18:49:01,494 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q3
+2026-01-27 18:49:02,381 - INFO - Updated company name for 0001350694 to: Bridgewater Associates, LP
+2026-01-27 18:49:02,382 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:49:03,106 - INFO - ✅ 成功提取信息表 (465822 字节)
+2026-01-27 18:49:03,107 - INFO - 💾 保存XML文件: Bridgewater_Associates_LP_CIK_0001350694_FORM_13F-HR_2025-11-13.xml
+2026-01-27 18:49:03,107 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:49:03,107 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:49:03,136 - INFO - 📊 找到 1014 个持仓记录
+2026-01-27 18:49:03,161 - INFO - ✅ 成功提取 1014 个持仓记录
+2026-01-27 18:49:03,173 - INFO - ✅ 完成: 1014 个持仓, 总市值: $25,527,677,108
+2026-01-27 18:49:03,340 - INFO - Saved 1014 holdings to database for filing 4
+2026-01-27 18:49:15,892 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q2
+2026-01-27 18:49:16,292 - INFO - Updated company name for 0001350694 to: Bridgewater Associates, LP
+2026-01-27 18:49:16,292 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:49:16,476 - INFO - ✅ 成功提取信息表 (269185 字节)
+2026-01-27 18:49:16,477 - INFO - 💾 保存XML文件: Bridgewater_Associates_LP_CIK_0001350694_FORM_13F-HR_2025-08-13.xml
+2026-01-27 18:49:16,477 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:49:16,477 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:49:16,491 - INFO - 📊 找到 585 个持仓记录
+2026-01-27 18:49:16,513 - INFO - ✅ 成功提取 585 个持仓记录
+2026-01-27 18:49:16,521 - INFO - ✅ 完成: 585 个持仓, 总市值: $24,791,713,463
+2026-01-27 18:49:16,657 - INFO - Saved 585 holdings to database for filing 5

@@ -910,7 +910,7 @@ class EDGARReportDownloader:
         self.logger.info(f"📋 {ticker} CIK: {cik}")
 
         # 获取指定类型的文件列表
-        filings = self._get_filings(cik, form_type, start_year, end_year)
+        filings, _ = self._get_filings(cik, form_type, start_year, end_year)
         if not filings:
             self.logger.warning(
                 f"没有找到 {ticker} 在 {start_year}-{end_year} 的{form_type}文件"
@@ -995,8 +995,8 @@ class EDGARReportDownloader:
 
     def _get_filings(
         self, cik: str, form_type: str, start_year: int, end_year: int
-    ) -> List[Dict[str, Any]]:
-        """获取指定年份范围和表单类型的文件列表"""
+    ) -> Tuple[List[Dict[str, Any]], str]:
+        """获取指定年份范围和表单类型的文件列表，并返回公司名称"""
 
         try:
             url = f"https://data.sec.gov/submissions/CIK{cik}.json"
@@ -1004,6 +1004,7 @@ class EDGARReportDownloader:
             response.raise_for_status()
 
             data = response.json()
+            company_name = data.get("name", "Unknown")
             filings = data.get("filings", {}).get("recent", {})
 
             # 过滤指定类型的文件
@@ -1025,11 +1026,11 @@ class EDGARReportDownloader:
             # 按日期排序
             filing_list.sort(key=lambda x: x["filingDate"])
 
-            return filing_list
+            return filing_list, company_name
 
         except Exception as e:
             self.logger.error(f"获取{form_type}文件列表时出错: {e}")
-            return []
+            return [], "Unknown"
 
     def _download_and_process_filing(
         self, ticker: str, cik: str, filing: Dict[str, Any]

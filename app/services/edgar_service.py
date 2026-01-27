@@ -94,9 +94,26 @@ class EdgarService:
             search_start_year = filing.year
             search_end_year = filing.year + 1
 
-            filings_list = self.downloader._get_filings(
+            filings_list, fetched_company_name = self.downloader._get_filings(
                 filing.cik, "13F-HR", search_start_year, search_end_year
             )
+
+            # Auto-update company name if generic
+            if fetched_company_name and fetched_company_name != "Unknown":
+                if (
+                    not filing.company_name
+                    or filing.company_name == "Unknown Company"
+                    or filing.company_name.isdigit()
+                ):
+                    filing.company_name = fetched_company_name
+                    session.add(filing)
+                    try:
+                        session.commit()
+                        logger.info(
+                            f"Updated company name for {filing.cik} to: {filing.company_name}"
+                        )
+                    except Exception as e:
+                        logger.warning(f"Failed to commit company name update: {e}")
 
             target_filing = self._find_matching_quarter_filing(
                 filings_list, filing.year, filing.quarter
