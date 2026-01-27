@@ -54,21 +54,23 @@
         }
     </style>
 </head>
-<body class="min-h-screen text-primary flex justify-center py-6 px-4 sm:px-8 lg:px-[136px]">
-    <div class="w-full max-w-[1280px] flex flex-col gap-6">
+<body class="min-h-screen p-8 flex justify-center text-primary">
+    <div class="w-full max-w-[1440px] flex flex-col gap-6">
         <!-- Header -->
-        <div class="flex flex-col gap-6">
-            <div class="flex items-center gap-3">
-                <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center text-white shadow-lg shadow-indigo-200">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2c-5.523 0-10 1.79-10 4s4.477 4 10 4 10-1.79 10-4-4.477-4-10-4z"/><path d="M22 6c0 2.21-4.477 4-10 4s-10-1.79-10-4"/><path d="M22 10c0 2.21-4.477 4-10 4s-10-1.79-10-4"/><path d="M22 14c0 2.21-4.477 4-10 4s-10-1.79-10-4"/></svg>
-                </div>
-                <h1 class="text-[24px] font-semibold text-primary tracking-tight">13F 数据管理系统</h1>
+        <div class="flex flex-col gap-6 mb-2">
+            <!-- Title -->
+            <div class="flex items-center gap-3 pl-1">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[#312c85]">
+                    <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                <div class="text-[30px] leading-9 font-normal text-[#312c85] tracking-wide">13F 数据管理系统</div>
             </div>
             
-            <div class="flex bg-tab-bg p-1 rounded-xl w-full">
-                <a href="/" class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-primary bg-white shadow-sm transition-all">管理</a>
-                <a href="/data" class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-secondary hover:text-primary transition-all hover:bg-white/50">数据展示</a>
-                <div class="flex-1 flex items-center justify-center py-2.5 rounded-[10px] text-sm font-medium text-gray-400 cursor-not-allowed">自动刷新</div>
+            <!-- Navigation -->
+            <div class="flex bg-[#ececf0] p-1 rounded-[14px] w-full">
+                <a href="/" class="flex-1 py-1.5 rounded-[14px] text-sm font-medium bg-white text-slate-900 shadow-sm text-center">管理</a>
+                <a href="/data" class="flex-1 py-1.5 rounded-[14px] text-sm font-medium text-slate-900 text-center hover:bg-white/50 transition-colors">数据展示</a>
+                <a href="#" class="flex-1 py-1.5 rounded-[14px] text-sm font-medium text-slate-900 text-center hover:bg-white/50 transition-colors">自动刷新</a>
             </div>
         </div>
 
