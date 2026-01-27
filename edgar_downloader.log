@@ -1,0 +1,50 @@
+2026-01-27 18:05:38,808 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q3
+2026-01-27 18:05:39,879 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:05:40,813 - INFO - ✅ 成功提取信息表 (465822 字节)
+2026-01-27 18:05:40,813 - INFO - 💾 保存XML文件: Unknown_Company_CIK_0001350694_FORM_13F-HR_2025-11-13.xml
+2026-01-27 18:05:40,813 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:05:40,813 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:05:40,840 - INFO - 📊 找到 1014 个持仓记录
+2026-01-27 18:05:40,862 - INFO - ✅ 成功提取 1014 个持仓记录
+2026-01-27 18:05:40,874 - INFO - ✅ 完成: 1014 个持仓, 总市值: $25,527,677,108
+2026-01-27 18:05:53,907 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q4
+2026-01-27 18:05:54,422 - ERROR - Task failed: No 13F-HR filing found for 2025 Q4
+2026-01-27 18:05:58,210 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q2
+2026-01-27 18:05:58,674 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:05:59,044 - INFO - ✅ 成功提取信息表 (269185 字节)
+2026-01-27 18:05:59,044 - INFO - 💾 保存XML文件: Unknown_Company_CIK_0001350694_FORM_13F-HR_2025-08-13.xml
+2026-01-27 18:05:59,044 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:05:59,044 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:05:59,052 - INFO - 📊 找到 585 个持仓记录
+2026-01-27 18:05:59,065 - INFO - ✅ 成功提取 585 个持仓记录
+2026-01-27 18:05:59,071 - INFO - ✅ 完成: 585 个持仓, 总市值: $24,791,713,463
+2026-01-27 18:34:46,478 - INFO - Starting actual download for Unknown Company (0001815253) 2025 Q3
+2026-01-27 18:34:54,093 - ERROR - 获取13F-HR文件列表时出错: HTTPSConnectionPool(host='data.sec.gov', port=443): Max retries exceeded with url: /submissions/CIK0001815253.json (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+2026-01-27 18:34:54,093 - ERROR - Task failed: No 13F-HR filing found for 2025 Q3
+2026-01-27 18:35:29,957 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q3
+2026-01-27 18:35:37,714 - ERROR - 获取13F-HR文件列表时出错: HTTPSConnectionPool(host='data.sec.gov', port=443): Max retries exceeded with url: /submissions/CIK0001350694.json (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+2026-01-27 18:35:37,714 - ERROR - Task failed: No 13F-HR filing found for 2025 Q3
+2026-01-27 18:39:43,560 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q3
+2026-01-27 18:39:44,524 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:39:44,950 - ERROR - 下载和处理13F文件时出错: HTTPSConnectionPool(host='www.sec.gov', port=443): Max retries exceeded with url: /Archives/edgar/data/0001350694/000117266125004777/0001172661-25-004777.txt (Caused by SSLError(SSLEOFError(8, 'EOF occurred in violation of protocol (_ssl.c:1129)')))
+2026-01-27 18:39:44,950 - ERROR - Task failed: Download failed in EDGARReportDownloader
+2026-01-27 18:41:50,269 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q3
+2026-01-27 18:41:52,511 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:41:53,598 - INFO - ✅ 成功提取信息表 (465822 字节)
+2026-01-27 18:41:53,598 - INFO - 💾 保存XML文件: Unknown_Company_CIK_0001350694_FORM_13F-HR_2025-11-13.xml
+2026-01-27 18:41:53,598 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:41:53,598 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:41:53,625 - INFO - 📊 找到 1014 个持仓记录
+2026-01-27 18:41:53,650 - INFO - ✅ 成功提取 1014 个持仓记录
+2026-01-27 18:41:53,662 - INFO - ✅ 完成: 1014 个持仓, 总市值: $25,527,677,108
+2026-01-27 18:41:53,819 - INFO - Saved 1014 holdings to database for filing 2
+2026-01-27 18:42:12,010 - INFO - Starting actual download for Unknown Company (0001350694) 2025 Q2
+2026-01-27 18:42:12,510 - INFO - 📥 下载13F完整申报文件...
+2026-01-27 18:42:12,843 - INFO - ✅ 成功提取信息表 (269185 字节)
+2026-01-27 18:42:12,843 - INFO - 💾 保存XML文件: Unknown_Company_CIK_0001350694_FORM_13F-HR_2025-08-13.xml
+2026-01-27 18:42:12,843 - INFO - 🔄 解析13F持仓数据...
+2026-01-27 18:42:12,843 - INFO - 🔍 开始解析13F持仓数据...
+2026-01-27 18:42:12,850 - INFO - 📊 找到 585 个持仓记录
+2026-01-27 18:42:12,864 - INFO - ✅ 成功提取 585 个持仓记录
+2026-01-27 18:42:12,871 - INFO - ✅ 完成: 585 个持仓, 总市值: $24,791,713,463
+2026-01-27 18:42:13,016 - INFO - Saved 585 holdings to database for filing 3

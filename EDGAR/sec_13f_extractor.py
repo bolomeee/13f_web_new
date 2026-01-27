@@ -235,6 +235,7 @@ class SEC13FExtractor:
                 "value_usd": raw_value,  # 现在直接存储美元值（2023年后数据）
                 "value_raw": raw_value,  # 保留原始值用于向后兼容
                 "shares_or_principal": {},
+                "put_call": get_text(info_table, "putCall"),
                 "investment_discretion": get_text(info_table, "investmentDiscretion"),
                 "voting_authority": {},
             }

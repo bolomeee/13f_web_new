@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>13F 数据管理系统 - 数据展示</title>
+    <link href="/static/css/styles.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0a0a0a',
+                        secondary: '#666666'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="title">13F 数据管理系统</div>
+            
+            <div class="tabs">
+                <a href="/" class="tab-link">管理</a>
+                <a href="/data" class="tab-link active">数据展示</a>
+                <!-- <a href="#" class="tab-link">自动刷新</a> -->
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 24px; align-items: flex-start;">
+            <!-- Sidebar -->
+            <div class="card sidebar">
+                <div class="card-header border-b pb-4 mb-4">
+                    <div class="card-title">筛选面板</div>
+                </div>
+                
+                <div class="flex flex-col gap-4">
+                    <div class="form-group">
+                        <label class="form-label">选择公司</label>
+                        <select id="filter-cik" class="form-select" onchange="loadFilesForCompany()">
+                            <option value="">加载中...</option>
+                        </select>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2" style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                        <div class="form-group">
+                            <label class="form-label">目标年份</label>
+                            <select id="filter-year" class="form-select">
+                                <option value="2025">2025</option>
+                                <option value="2024" selected>2024</option>
+                                <option value="2023">2023</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">目标季度</label>
+                            <select id="filter-quarter" class="form-select">
+                                <option value="Q1">Q1</option>
+                                <option value="Q2">Q2</option>
+                                <option value="Q3" selected>Q3</option>
+                                <option value="Q4">Q4</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button onclick="loadComparisonData()" class="btn-primary w-full justify-center">
+                        查看对比分析
+                    </button>
+                </div>
+
+                <div class="mt-8 border-t pt-4" style="margin-top: 32px; border-top: 1px solid #f3f4f6; padding-top: 16px;">
+                    <div class="card-subtitle mb-4">本季变动概览</div>
+                    <div class="stats-grid">
+                        <div class="stats-item"><span>总持仓</span><span id="stat-count" class="font-bold">-</span></div>
+                        <div class="stats-item" style="color:#059669;"><span>新增 (New)</span><span id="stat-new" class="font-bold">-</span></div>
+                        <div class="stats-item" style="color:#2563eb;"><span>增持 (Inc)</span><span id="stat-inc" class="font-bold">-</span></div>
+                        <div class="stats-item" style="color:#d97706;"><span>减持 (Dec)</span><span id="stat-dec" class="font-bold">-</span></div>
+                        <div class="stats-item" style="color:#dc2626;"><span>清仓 (Sold)</span><span id="stat-sold" class="font-bold">-</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="card main-content" style="min-height: 600px;">
+                <div class="card-header border-b pb-4 mb-4">
+                    <div class="card-title">持仓明细 (vs 上季度)</div>
+                    <div class="card-subtitle" id="data-subtitle">请选择公司和季度进行查看</div>
+                </div>
+                
+                <div style="overflow-x: auto;">
+                    <table class="data-table w-full">
+                        <thead>
+                            <tr>
+                                <th>标的 (Issuer)</th>
+                                <th>CUSIP</th>
+                                <th>类别</th>
+                                <th class="text-right">市值 ($)</th>
+                                <th class="text-right">持仓量</th>
+                                <th class="text-right">变化</th>
+                                <th class="text-center">期权</th>
+                            </tr>
+                        </thead>
+                        <tbody id="comparisonBody">
+                            <tr><td colspan="7" class="text-center py-12 text-gray-400" style="text-align: center; padding: 48px; color: #999;">请选择条件并点击分析</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Logic -->
+    <script>
+        // Init
+        loadCompanies();
+
+        async function loadCompanies() {
+            try {
+                const res = await fetch('/api/data/companies');
+                const companies = await res.json();
+                const select = document.getElementById('filter-cik');
+                select.innerHTML = '<option value="">请选择公司...</option>';
+                companies.forEach(c => {
+                    select.innerHTML += `<option value="${c.cik}">${c.name}</option>`;
+                });
+            } catch(e) { console.error(e); }
+        }
+
+        async function loadComparisonData() {
+            const cik = document.getElementById('filter-cik').value;
+            const year = document.getElementById('filter-year').value;
+            const quarter = document.getElementById('filter-quarter').value;
+            
+            if (!cik) { alert("请先选择一家公司"); return; }
+            
+            const tbody = document.getElementById('comparisonBody');
+            tbody.innerHTML = '<tr><td colspan="7" class="text-center py-12 text-gray-500" style="text-align: center; padding: 48px;">正在分析数据...</td></tr>';
+            
+            try {
+                const res = await fetch(`/api/data/comparison?cik=${cik}&year=${year}&quarter=${quarter}`);
+                if (!res.ok) throw new Error("无法获取对比数据，请确认数据完整。");
+                
+                const data = await res.json();
+                
+                // Stats
+                document.getElementById('stat-count').textContent = data.stats.total_count;
+                document.getElementById('stat-new').textContent = data.stats.new_count;
+                document.getElementById('stat-inc').textContent = data.stats.increased_count;
+                document.getElementById('stat-dec').textContent = data.stats.decreased_count;
+                document.getElementById('stat-sold').textContent = data.stats.sold_count;
+                
+                document.getElementById('data-subtitle').textContent = 
+                    `${data.metadata.current.year} ${data.metadata.current.quarter} vs 上个季度`;
+
+                // Table
+                tbody.innerHTML = '';
+                data.holdings.forEach(h => {
+                    const changeVal = h.shares_change;
+                    let changeColor = 'text-gray-400';
+                    let changePrefix = '';
+                    
+                    if (changeVal > 0) { changeColor = 'text-green-600'; changePrefix = '+'; }
+                    else if (changeVal < 0) { changeColor = 'text-red-500'; }
+                    
+                    let putCallBadge = '-';
+                    if (h.put_call === 'PUT') putCallBadge = '<span class="bg-red-50 text-red-600 px-2 py-0.5 rounded text-xs border border-red-100 font-bold">PUT</span>';
+                    else if (h.put_call === 'CALL') putCallBadge = '<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded text-xs border border-blue-100 font-bold">CALL</span>';
+
+                    const row = `
+                        <tr class="hover:bg-gray-50 transition-colors ${h.change_type === 'sold' ? 'opacity-60 bg-gray-50' : ''}">
+                            <td class="font-medium text-gray-900">${h.issuer}</td>
+                            <td class="font-mono text-xs text-gray-500">${h.cusip}</td>
+                            <td class="text-xs text-gray-500">${h.class}</td>
+                            <td class="text-right font-mono text-gray-700">$${h.value.toLocaleString()}</td>
+                            <td class="text-right font-mono">${h.shares.toLocaleString()}</td>
+                            <td class="text-right font-mono font-medium ${changeColor}">
+                                ${changePrefix}${changeVal !== 0 ? changeVal.toLocaleString() : '-'}
+                            </td>
+                            <td class="text-center">${putCallBadge}</td>
+                        </tr>
+                    `;
+                    tbody.innerHTML += row;
+                });
+
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-12 text-red-500" style="text-align: center; padding: 48px;">${e.message}</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>

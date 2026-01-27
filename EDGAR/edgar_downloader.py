@@ -35,7 +35,10 @@ import logging
 import warnings
 
 # 导入13F提取器
-from sec_13f_extractor import SEC13FExtractor
+try:
+    from .sec_13f_extractor import SEC13FExtractor
+except ImportError:
+    from sec_13f_extractor import SEC13FExtractor
 
 # 过滤BeautifulSoup警告
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
@@ -787,15 +790,21 @@ class EDGARReportDownloader:
     """EDGAR文件下载器 - 支持10-K和13F-HR表单"""
 
     def __init__(self, config_path: str = "config.json"):
+        self.logger = logging.getLogger(__name__)
         self.config_path = config_path
         self.config = self._load_config()
+        # User-Agent strictly required by SEC: "Company Name AdminContact@sample.com"
+        # We'll use "13F_Analyzer <email>"
+        ua_email = self.config["user_agent"]["email"]
+        user_agent_str = f"13F_Analyzer {ua_email}"
+
         self.session = requests.Session()
         self.session.headers.update(
             {
-                "User-Agent": f'{self.config["user_agent"]["email"]} Python SEC API Client'
+                "User-Agent": user_agent_str,
+                "Accept-Encoding": "gzip, deflate",
             }
         )
-        self.logger = logging.getLogger(__name__)
 
         # 根据表单类型初始化对应的提取器
         self.form_type = self.config.get("form_type", "10-K")
