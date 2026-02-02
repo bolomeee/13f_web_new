@@ -35,7 +35,7 @@ import logging
 import warnings
 
 # 导入13F提取器
-from sec_13f_extractor import SEC13FExtractor
+from .sec_13f_extractor import SEC13FExtractor
 
 # 过滤BeautifulSoup警告
 warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)

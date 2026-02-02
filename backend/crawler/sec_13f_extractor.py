@@ -264,6 +264,22 @@ class SEC13FExtractor:
                     "none": self._parse_number(get_text(voting_authority, "None")),
                 }
 
+            # 提取期权类型 (Put/Call) - 按照集成文档要求添加
+            # Extract option type (Put/Call) as per integration specification
+            put_call_node = info_table.find(".//putCall") or info_table.find(
+                ".//ns1:putCall", self.namespaces
+            )
+
+            if put_call_node is not None and put_call_node.text:
+                # 存入 'PUT' 或 'CALL'，供数据库 OptionPosition 表使用
+                # Store 'PUT' or 'CALL' for OptionPosition table
+                holding["put_call"] = put_call_node.text.strip().upper()
+                self.logger.debug(
+                    f"📌 检测到期权持仓: {holding['put_call']} - {holding.get('issuer_name')}"
+                )
+            else:
+                holding["put_call"] = None
+
             # 数据验证
             if not holding["cusip"] or len(holding["cusip"]) != 9:
                 self.logger.debug(f"⚠️ 无效的CUSIP: {holding['cusip']}")
