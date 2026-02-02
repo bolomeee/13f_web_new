@@ -24,3 +24,50 @@ INFO 2026-02-02 15:58:10,093 basehttp "GET /static/admin/css/login.css HTTP/1.1"
 INFO 2026-02-02 15:58:10,093 basehttp "GET /static/admin/css/nav_sidebar.css HTTP/1.1" 200 2810
 INFO 2026-02-02 15:58:10,094 basehttp "GET /static/admin/css/responsive.css HTTP/1.1" 200 16565
 INFO 2026-02-02 15:58:10,194 basehttp "GET /static/admin/js/nav_sidebar.js HTTP/1.1" 200 3063
+INFO 2026-02-02 16:01:02,263 autoreload /Users/wonderer/Desktop/Project/13f_web_new/backend/crawler/tasks.py changed, reloading.
+INFO 2026-02-02 16:01:02,665 autoreload Watching for file changes with StatReloader
+INFO 2026-02-02 16:01:37,335 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:01:37,336 services 📝 更新机构名称: Berkshire Hathaway Inc
+INFO 2026-02-02 16:01:37,337 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:01:37,337 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+ERROR 2026-02-02 16:01:40,263 edgar_service ❌ SEC API请求失败: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0001067983.json
+INFO 2026-02-02 16:01:40,264 edgar_service 🔍 开始爬取机构: Berkshire Hathaway Inc (CIK: 0001067983)
+INFO 2026-02-02 16:01:40,264 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+ERROR 2026-02-02 16:01:41,534 edgar_service ❌ SEC API请求失败: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK0001067983.json
+WARNING 2026-02-02 16:01:41,534 edgar_service ⚠️ 未找到 Berkshire Hathaway Inc 的13F-HR文件
+INFO 2026-02-02 16:02:33,787 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:02:33,789 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:02:33,789 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK1067983.json
+ERROR 2026-02-02 16:02:42,807 edgar_service ❌ SEC API请求失败: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK1067983.json
+INFO 2026-02-02 16:02:42,807 edgar_service 🔍 开始爬取机构: Berkshire Hathaway Inc (CIK: 0001067983)
+INFO 2026-02-02 16:02:42,807 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK1067983.json
+ERROR 2026-02-02 16:02:43,285 edgar_service ❌ SEC API请求失败: 404 Client Error: Not Found for url: https://data.sec.gov/submissions/CIK1067983.json
+WARNING 2026-02-02 16:02:43,285 edgar_service ⚠️ 未找到 Berkshire Hathaway Inc 的13F-HR文件
+INFO 2026-02-02 16:04:12,771 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:04:12,773 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:04:12,773 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+INFO 2026-02-02 16:04:15,659 edgar_service 🔍 开始爬取机构: Berkshire Hathaway Inc (CIK: 0001067983)
+INFO 2026-02-02 16:04:15,659 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+INFO 2026-02-02 16:04:16,076 edgar_service 📋 找到 1 个13F-HR文件
+INFO 2026-02-02 16:04:16,078 edgar_service 📥 下载文件: 0001193125-25-282901
+INFO 2026-02-02 16:04:16,078 edgar_service 📡 下载XML: https://www.sec.gov/Archives/edgar/data/1067983/000119312525282901/form13fInfoTable.xml
+ERROR 2026-02-02 16:04:18,373 edgar_service ❌ 下载XML失败: 404 Client Error: Not Found for url: https://www.sec.gov/Archives/edgar/data/1067983/000119312525282901/form13fInfoTable.xml
+INFO 2026-02-02 16:04:18,373 edgar_service 🔄 尝试备用URL: https://www.sec.gov/cgi-bin/viewer?action=view&cik=0001067983&accession_number=0001193125-25-282901&xbrl_type=v
+ERROR 2026-02-02 16:04:18,807 edgar_service ❌ 下载信息表失败: 0001193125-25-282901
+INFO 2026-02-02 16:04:18,912 edgar_service 🎉 完成爬取 Berkshire Hathaway Inc，处理了 0 个文件
+INFO 2026-02-02 16:05:01,771 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:05:01,773 services ✅ 加载了 10299 个ticker-CIK映射
+INFO 2026-02-02 16:05:01,773 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+INFO 2026-02-02 16:05:03,846 edgar_service 🔍 开始爬取机构: Berkshire Hathaway Inc (CIK: 0001067983)
+INFO 2026-02-02 16:05:03,846 edgar_service 📡 请求SEC API: https://data.sec.gov/submissions/CIK0001067983.json
+INFO 2026-02-02 16:05:04,907 edgar_service 📋 找到 1 个13F-HR文件
+INFO 2026-02-02 16:05:04,908 edgar_service 📥 下载文件: 0001193125-25-282901
+INFO 2026-02-02 16:05:04,908 edgar_service 📡 尝试下载: form13fInfoTable.xml
+INFO 2026-02-02 16:05:06,035 edgar_service 📡 尝试下载: primary_doc.xml
+INFO 2026-02-02 16:05:06,406 edgar_service 📡 尝试下载: form13f_infoTable.xml
+INFO 2026-02-02 16:05:06,831 edgar_service 📡 尝试下载: infotable.xml
+INFO 2026-02-02 16:05:07,173 edgar_service 📡 尝试下载: 000119312525282901.xml
+WARNING 2026-02-02 16:05:07,525 edgar_service ⚠️ 未找到标准XML文件，尝试获取文件列表...
+INFO 2026-02-02 16:05:07,526 edgar_service 📡 获取文件列表: https://www.sec.gov/cgi-bin/viewer?action=view&cik=0001067983&accession_number=0001193125-25-282901&xbrl_type=v
+ERROR 2026-02-02 16:05:09,153 edgar_service ❌ 下载信息表失败: 0001193125-25-282901
+INFO 2026-02-02 16:05:09,259 edgar_service 🎉 完成爬取 Berkshire Hathaway Inc，处理了 0 个文件

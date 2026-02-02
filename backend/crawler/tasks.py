@@ -116,19 +116,18 @@ def crawl_single_institution_sync(institution: Institution) -> int:
     logger.info(f"🔍 开始爬取机构: {institution.name} (CIK: {institution.cik})")
 
     try:
-        # 初始化爬虫和提取器
-        # 注意：EDGARReportDownloader需要重构以适配Django
-        # 这里提供一个简化版本的实现思路
+        # 使用EDGARCrawlerService进行爬取
+        from .edgar_service import EDGARCrawlerService
 
-        filing_service = FilingService()
-        extractor = SEC13FExtractor()
+        crawler = EDGARCrawlerService()
 
-        # TODO: 这里需要调用重构后的EDGAR下载器
-        # 由于原始的edgar_downloader.py是独立脚本，需要重构为服务
-        # 暂时返回0，待后续实现完整的爬虫集成
+        # 爬取最近4个季度的13F文件
+        filings_count = crawler.crawl_institution_13f(
+            institution=institution, max_filings=4
+        )
 
-        logger.warning("⚠️ EDGAR下载器集成待实现")
-        return 0
+        logger.info(f"✅ 成功爬取 {institution.name}，处理了 {filings_count} 个文件")
+        return filings_count
 
     except Exception as e:
         logger.error(f"❌ 爬取 {institution.name} 时出错: {e}")
